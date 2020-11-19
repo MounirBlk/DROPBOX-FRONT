@@ -14,21 +14,24 @@ import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import AllInboxIcon from '@material-ui/icons/AllInbox';
+import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
+import MeetingRoomOutlinedIcon from '@material-ui/icons/MeetingRoomOutlined';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import styles, { Styles } from './styles';
+import { useHistory } from "react-router-dom";
 
 //props
-interface P {}
+interface P {
+  onDrawerToggle?:(event: any) => void
+}
 
 //state
 interface S {}
 
 export class HeaderProps extends React.PureComponent<P & WithStyles<Styles>, S>{
   public static Display = withStyles(styles as any)(HeaderProps) as React.ComponentType<P>    //Methode de lecture
-  
   render(){
-    console.log('headerProps:',this.props)
-
     const { classes/*, onDrawerToggle*/ } = this.props;
     return(
         <React.Fragment>
@@ -41,9 +44,12 @@ export class HeaderProps extends React.PureComponent<P & WithStyles<Styles>, S>{
         >
           <Toolbar>
             <Grid container alignItems="center" spacing={1}>
+              <Grid item>
+                <InsertEmoticonIcon color="inherit" />
+              </Grid>
               <Grid item xs>
-                <Typography color="inherit" variant="h5" component="h1">
-                  DROPBOX
+                <Typography color="inherit" variant="h6" component="h1">
+                  Bonjour et bienvenue sur notre application
                 </Typography>
               </Grid>
               <Grid item>
@@ -52,28 +58,14 @@ export class HeaderProps extends React.PureComponent<P & WithStyles<Styles>, S>{
                 </Button>
               </Grid>
               <Grid item>
-                <Tooltip title="Help">
-                  <IconButton color="inherit">
-                    <HelpIcon />
+                <Tooltip title="Deconnexion">
+                  <IconButton color="secondary">
+                    <MeetingRoomOutlinedIcon />
                   </IconButton>
                 </Tooltip>
               </Grid>
             </Grid>
           </Toolbar>
-        </AppBar>
-        <AppBar
-          component="div"
-          className={classes.secondaryBar}
-          color="primary"
-          position="static"
-          elevation={0}
-        >
-          <Tabs value={0} textColor="inherit">
-            <Tab textColor="inherit" label="Accueil" />
-            <Tab textColor="inherit" label="Dropbox" />
-            <Tab textColor="inherit" label="Utilisateur" />
-            <Tab textColor="inherit" label="Paramètres" />
-          </Tabs>
         </AppBar>
       </React.Fragment>
     );

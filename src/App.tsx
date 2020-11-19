@@ -3,8 +3,7 @@ import React from 'react';
 import { Login } from './components/Login/Login';
 import { HashRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import { createBrowserHistory } from "history";
-import { PaperbaseProps } from './components/Paperbase/Paperbase';
-import { ContentProps } from './components/Content/Content';
+import { DashboardProps } from './components/Dashboard/Dashboard';
 import { HeaderProps } from './components/Header/Header';
 
 export class App extends React.PureComponent {
@@ -12,8 +11,9 @@ export class App extends React.PureComponent {
     return (
       <Router>
         <Switch>
+          <Route exact path="/" component={Login.Display} />
           <Route exact path="/login" component={Login.Display} />
-          <Route exact path="/paper" component={PaperbaseProps.Display} />
+          <Route exact path="/dashboard" component={DashboardProps.Display} />
         </Switch>
       </Router>
     );

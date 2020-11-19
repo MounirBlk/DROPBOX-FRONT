@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { createMuiTheme, createStyles, Theme } from '@material-ui/core';//makeStyles
 
-export type Styles = "root" | "app" | "main" | "footer";// add class create
+export type Styles = "root" | "app" | "main" | "footer" | "drawer";// add class create
 
 export default (theme: Theme) => createStyles<Styles,{}>({
     root: {
@@ -21,6 +21,12 @@ export default (theme: Theme) => createStyles<Styles,{}>({
     footer: {
         padding: theme.spacing(2),
         background: '#eaeff1',
+    },
+    drawer: {
+        [theme.breakpoints.up('sm')]: {
+          width: 200,
+          flexShrink: 0,
+        },
     },
 });
 

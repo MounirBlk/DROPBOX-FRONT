@@ -10,6 +10,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import { NavigatorProps } from '../Navigator/Navigator';
 import { ContentProps } from '../Content/Content';
 import { HeaderProps } from '../Header/Header';
 import styles, { Styles } from './styles';
@@ -23,7 +24,7 @@ interface S {
 }
 
 
-export class PaperbaseProps extends React.PureComponent<P & WithStyles<Styles>, S>{
+export class DashboardProps extends React.PureComponent<P & WithStyles<Styles>, S>{
     Copyright = () => {
       return (
           <Typography variant="body2" color="textSecondary" align="center">
@@ -32,29 +33,41 @@ export class PaperbaseProps extends React.PureComponent<P & WithStyles<Styles>, 
       );
     }
 
-    public static Display = withStyles(styles as any)(PaperbaseProps) as React.ComponentType<P>    //Methode de lecture
+    public static Display = withStyles(styles as any)(DashboardProps) as React.ComponentType<P>    //Methode de lecture
       constructor(props: P & WithStyles<Styles>) {
         super(props);
         this.state = {
           mobileOpen: false
         };
       }
-  
+
+      handleDrawerToggle = (event: React.ChangeEvent<{}>) => {
+        this.setState({mobileOpen: !this.state.mobileOpen})
+      };
+
     render(){
       const { classes } = this.props;
-      /*const [mobileOpen, setMobileOpen] = useState(false);//useState
-      const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-      };*/   
-      /*const handleDrawerToggle = () => {
-        this.setState({mobileOpen: this.state.mobileOpen})
-      };*/     
+      const { mobileOpen } = this.state;
+      
       return(
         <ThemeProvider theme={theme}>
         <div className={classes.root}>
           <CssBaseline />
+          <nav className={classes.drawer}>
+            <Hidden smUp implementation="js">
+              <NavigatorProps.Display
+                PaperProps={{ style: { width: 200 } }}
+                variant="temporary"
+                open={mobileOpen}
+                onClose={this.handleDrawerToggle}
+              />
+            </Hidden>
+            <Hidden xsDown implementation="css">
+              <NavigatorProps.Display PaperProps={{ style: { width: 200 } }} />
+            </Hidden>
+          </nav>
           <div className={classes.app}>
-            <HeaderProps.Display /*onDrawerToggle={handleDrawerToggle} */ />
+            <HeaderProps.Display onDrawerToggle={this.handleDrawerToggle}  />
             <main className={classes.main}>
               <ContentProps.Display />
             </main>

@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { WithStyles, withStyles,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, Avatar} from '@material-ui/core';
+import { WithStyles,InputAdornment, withStyles,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, Avatar} from '@material-ui/core';
 import styles, { Styles } from './styles';
+import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import LockOpenOutlinedIcon from '@material-ui/icons/LockOpenOutlined';
 
 //props
 interface P {}
@@ -10,7 +13,7 @@ interface P {}
 //state
 interface S {}
 
-export class Login extends React.PureComponent<P & WithStyles<Styles>>{
+export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
     Copyright = () => {
       return (
           <Typography variant="body2" color="textSecondary" align="center">
@@ -18,6 +21,10 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>>{
           </Typography>
       );
     }
+    connexion = () => {
+      console.log('Connexion')
+    }
+
     public static Display = withStyles(styles as any)(Login) as React.ComponentType<P>    //Methode de lecture
     render(){
         const { classes } = this.props;
@@ -35,7 +42,6 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>>{
               </Typography>
               <form className={classes.form} noValidate>
                 <TextField
-                  variant="outlined"
                   margin="normal"
                   required
                   fullWidth
@@ -44,9 +50,15 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>>{
                   name="email"
                   autoComplete="email"
                   autoFocus
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountCircleOutlinedIcon />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 <TextField
-                  variant="outlined"
                   margin="normal"
                   required
                   fullWidth
@@ -55,19 +67,23 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>>{
                   type="password"
                   id="password"
                   autoComplete="current-password"
-                />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <VpnKeyOutlinedIcon />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   color="primary"
+                  onClick={this.connexion}
                   className={classes.submit}
                 >
-                  Connexion
+                <LockOpenOutlinedIcon /> Connexion
                 </Button>
                 <Grid container>
                   <Grid item xs>
@@ -76,7 +92,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>>{
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="#" variant="body2">
+                    <Link variant="body2">
                       {"Inscription"}
                     </Link>
                   </Grid>
