@@ -5,6 +5,8 @@ import { Route, Link, Switch,BrowserRouter } from 'react-router-dom'
 import { DashboardProps } from './components/Dashboard/Dashboard';
 import { ResetPassword } from './components/ResetPassword/ResetPassword';
 import { Register } from './components/Register/Register';
+import { Cgu } from './components/Cgu/Cgu'
+import { Nf404 } from './components/Nf404/Nf404'
 
 export class App extends React.PureComponent {
   render(){
@@ -26,8 +28,11 @@ export class App extends React.PureComponent {
             <Route exact={true} path={'/register'} render={()=>(
               <Register.Display />
             )} />
+            <Route exact={true} path={'/rgpd'} render={()=>(
+              <Cgu.Display />
+            )} />
              <Route exact={true} path={'*'} render={()=>(
-              <Login.Display />
+              <Nf404.Display />
             )} />
           </Switch>
       </BrowserRouter>

@@ -28,6 +28,7 @@ interface S {
   vertical: string,
   horizontal: string,
   success: boolean,
+  RGPD: boolean
 }
 
 export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
@@ -41,23 +42,36 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
       error: false
     },
     vertical: 'top',
-    horizontal: 'center', error: false, success: false, civilite: "Homme", email: '', firstName: '', lastName: '', phone: 0, date_naissance: '', username: '', password: '', password2: ''
+    horizontal: 'center', 
+    error: false, 
+    success: false, 
+    civilite: "Homme", 
+    email: '', 
+    firstName: '', 
+    lastName: '', 
+    phone: 0, 
+    date_naissance: '', 
+    username: '', 
+    password: '', 
+    password2: '',
+    RGPD : false,
   };
 
   register = (event: any) => {
     event.preventDefault();
-    console.log(this.state)
-    if (stringVerif(this.state.firstName) == false)
+    if (this.state.RGPD === false)
+      this.setState({ message: { message: "Condition général d'utilisation non accepter", error: true }, error: true })
+    else if (stringVerif(this.state.firstName) === false)
       this.setState({ message: { message: "Le prenom n'est pas correcte", error: true }, error: true })
-    else if (stringVerif(this.state.lastName) == false)
+    else if (stringVerif(this.state.lastName) === false)
       this.setState({ message: { message: "Nom de famille n'est pas correcte", error: true }, error: true })
-    else if (stringVerif(this.state.username) == false)
+    else if (stringVerif(this.state.username) === false)
       this.setState({ message: { message: "Votre surnom n'est pas correcte", error: true }, error: true })
-    else if (email(this.state.email) == false)
+    else if (email(this.state.email) === false)
       this.setState({ message: { message: "Votre email n'est pas correcte", error: true }, error: true })
-    else if (password(this.state.password) == false)
+    else if (password(this.state.password) === false)
       this.setState({ message: { message: "Mot de passe n'est pas correcte", error: true }, error: true })
-    else if (this.state.password != this.state.password2)
+    else if (this.state.password !== this.state.password2)
       this.setState({ message: { message: "vos mot de passe ne sont pas identique", error: true }, error: true })
     else {
       let obj = {
@@ -74,6 +88,9 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
       axios.post('http://localhost:4000/register', obj)
         .then((response) => {
         this.setState({ message: { message: "un email vous à été transmis", error: false }, success: true });
+        setTimeout(() => {
+          document.location.href = "/login"
+        }, 3500);
         })
         .catch((error) => {
           this.setState({ message: { message: "aucun compte n'a été trouver", error: true }, error: true })
@@ -114,6 +131,10 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
 
   handleChangepassword = (event: any) => {
     this.setState({ password: event.target.value });
+  }
+
+  handleChangeRGPD = (event: any) => {
+    this.setState({ RGPD: event.target.value });
   }
 
   handleChangepassword2 = (event: any) => {
@@ -176,7 +197,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   required
                   fullWidth
                   id="firstName"
-                  label="First Name"
+                  label="Prenom"
                   type="text"
                   value={this.state.firstName}
                   onChange={this.handleChangefirstName}
@@ -196,7 +217,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   required
                   fullWidth
                   id="lastName"
-                  label="Last Name"
+                  label="Nom de famille"
                   name="lastName"
                   type="text"
                   value={this.state.lastName}
@@ -217,7 +238,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   required
                   fullWidth
                   id="Username"
-                  label="Username"
+                  label="Surnom"
                   name="Username"
                   type="text"
                   value={this.state.username}
@@ -289,7 +310,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Email"
                   name="email"
                   type="email"
                   value={this.state.email}
@@ -348,7 +369,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  control={<Checkbox value="true" color="primary"  onChange={this.handleChangeRGPD}/>}
                   label="J'accepte les conditions d'utilisation et j'autorise Dropbox à utiliser les données a des fins d'amerioration."
                 />
               </Grid>
@@ -360,7 +381,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
               color="primary"
               className={classes.submit}
             >
-              Sign Up
+              Créer mon compte
           </Button>
             <Grid container justify="flex-end">
               <Grid item>
