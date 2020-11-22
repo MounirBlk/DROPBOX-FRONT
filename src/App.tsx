@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { Login } from './components/Login/Login';
-import { HashRouter as Router, Route, Link, Switch,BrowserRouter } from 'react-router-dom'
-import { createBrowserHistory } from "history";
+import { Route, Link, Switch,BrowserRouter } from 'react-router-dom'
 import { DashboardProps } from './components/Dashboard/Dashboard';
 import { ResetPassword } from './components/ResetPassword/ResetPassword';
 import { Register } from './components/Register/Register';
@@ -11,7 +10,6 @@ export class App extends React.PureComponent {
   render(){
     return (
       <BrowserRouter>
-        <Router>
           <Switch>
             <Route exact={true} path={'/'} render={()=>(
               <Login.Display />
@@ -28,8 +26,10 @@ export class App extends React.PureComponent {
             <Route exact={true} path={'/register'} render={()=>(
               <Register.Display />
             )} />
+             <Route exact={true} path={'*'} render={()=>(
+              <Login.Display />
+            )} />
           </Switch>
-        </Router>
       </BrowserRouter>
     );
   }

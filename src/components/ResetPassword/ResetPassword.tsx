@@ -76,7 +76,6 @@ export class ResetPassword extends React.PureComponent<P & WithStyles<Styles>, S
       return (
         <Container component="main" maxWidth="md">
           <CssBaseline />
-
           <div className={classes.paper}>
             <Typography component="h1" variant="h5">
               Mot de passe oublié

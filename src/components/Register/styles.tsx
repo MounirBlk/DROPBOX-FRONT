@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { createStyles, Theme } from '@material-ui/core';//makeStyles
 
-export type Styles = "paper" | "avatar" | "form" | "submit" | "formControl" | "selectEmpty";// add class create
+export type Styles = "paper" | "avatar" | "form" | "submit" | "formControl" | "selectEmpty" ;// add class create
 
 export default (theme: Theme) => createStyles<Styles,{}>({
     paper: {
@@ -12,6 +12,7 @@ export default (theme: Theme) => createStyles<Styles,{}>({
       },
       avatar: {
         margin: theme.spacing(1),
+        padding:"3%",
         backgroundColor: "#0055ff",
       },
       form: {
@@ -23,9 +24,7 @@ export default (theme: Theme) => createStyles<Styles,{}>({
           backgroundColor: "#0055ff",
       },
       formControl: {
-        margin: theme.spacing(1),
-        marignRigth: "5%",
-        minWidth: "99%",
+        minWidth: "100%",
         MarginBottom: theme.spacing(1)
       },
       selectEmpty: {

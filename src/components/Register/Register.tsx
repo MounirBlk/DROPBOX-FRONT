@@ -1,59 +1,127 @@
-import React from 'react';
-import { WithStyles,Select,FormControl,InputLabel, MenuItem,  withStyles, InputAdornment, Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Grid, Box, Typography, Container } from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import * as React from 'react';
+import { WithStyles, Snackbar, Select, FormControl, InputLabel, withStyles, InputAdornment, Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Grid, Box, Typography, Container } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/Lock';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';
+import MuiAlert, { Alert, AlertTitle } from '@material-ui/lab';
 import styles, { Styles } from './styles';
+import { User } from '../../interfaces/user';
+import { stringVerif, email, password } from '../../middleware/Verif/Verif';
+import axios from 'axios';
 
-interface P {}
+interface P {
+}
+
 interface S {
   civilite: string;
   firstName: string;
   lastName: string;
+  email: string
   phone: number;
   date_naissance: string;
   username: string;
   password: string;
+  password2: string;
+  message: User,
+  error: boolean
+  vertical: string,
+  horizontal: string,
+  success: boolean,
 }
 
 export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
 
-  public static Display = withStyles(styles as any)(Register) as React.ComponentType<P>    //Methode de lecture
-  public state = { civilite: "Homme",firstName:'', lastName:'', phone: 0, date_naissance: '', username: '', password: ''}
+  public static Display = withStyles(styles as any)(Register) as React.ComponentType<P>
+  //Methode de lecture
+  public state: Readonly<S> = {
+    message:
+    {
+      message: "",
+      error: false
+    },
+    vertical: 'top',
+    horizontal: 'center', error: false, success: false, civilite: "Homme", email: '', firstName: '', lastName: '', phone: 0, date_naissance: '', username: '', password: '', password2: ''
+  };
 
-  constructor(props: any, state: any) {
-    super(props);
-    this.state = state;
+  register = (event: any) => {
+    event.preventDefault();
+    console.log(this.state)
+    if (stringVerif(this.state.firstName) == false)
+      this.setState({ message: { message: "Le prenom n'est pas correcte", error: true }, error: true })
+    else if (stringVerif(this.state.lastName) == false)
+      this.setState({ message: { message: "Nom de famille n'est pas correcte", error: true }, error: true })
+    else if (stringVerif(this.state.username) == false)
+      this.setState({ message: { message: "Votre surnom n'est pas correcte", error: true }, error: true })
+    else if (email(this.state.email) == false)
+      this.setState({ message: { message: "Votre email n'est pas correcte", error: true }, error: true })
+    else if (password(this.state.password) == false)
+      this.setState({ message: { message: "Mot de passe n'est pas correcte", error: true }, error: true })
+    else if (this.state.password != this.state.password2)
+      this.setState({ message: { message: "vos mot de passe ne sont pas identique", error: true }, error: true })
+    else {
+      let obj = {
+        civilite: this.state.civilite,
+        email: this.state.email,
+        firstname: this.state.firstName,
+        lastname: this.state.lastName,
+        phone: this.state.phone,
+        date_naissance: this.state.date_naissance,
+        username: this.state.username,
+        password: this.state.password
+      }
+
+      axios.post('http://localhost:4000/register', obj)
+        .then((response) => {
+        this.setState({ message: { message: "un email vous à été transmis", error: false }, success: true });
+        })
+        .catch((error) => {
+          this.setState({ message: { message: "aucun compte n'a été trouver", error: true }, error: true })
+        });
+    }
+  };
+
+  handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    this.setState({ success: false, error: false });
   }
 
-  handleChangefirstName(event: any) {
+  handleChangefirstName = (event: any) => {
     this.setState({ firstName: event.target.value });
   }
 
-  handleChangelastName(event: any) {
+  handleChangelastName = (event: any) => {
     this.setState({ lastName: event.target.value });
   }
 
-  handleChangeUsername(event: any) {
+  handleChangeUsername = (event: any) => {
     this.setState({ username: event.target.value });
   }
 
-  handleChangeDate(event: any) {
+  handleChangeDate = (event: any) => {
     this.setState({ date_naissance: event.target.value });
   }
 
-  handleChangecivilite(event: any) {
+  handleChangecivilite = (event: any) => {
     this.setState({ civilite: event.target.value });
   }
 
-  handleChangephone(event: any) {
+  handleChangephone = (event: any) => {
     this.setState({ phone: event.target.value });
   }
 
-  handleChangepassword(event: any) {
+  handleChangepassword = (event: any) => {
     this.setState({ password: event.target.value });
+  }
+
+  handleChangepassword2 = (event: any) => {
+    this.setState({ password2: event.target.value });
+  }
+
+  handleChangeemail = (event: any) => {
+    this.setState({ email: event.target.value });
   }
 
   Copyright = () => {
@@ -69,20 +137,36 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
     );
   }
 
+  ErrorMessage(string: string) {
+    return string;
+  }
+
   render() {
     const { classes } = this.props;
-    const { civilite } = this.state;
+    const { error, success } = this.state;
     return (
       <Container component="main" maxWidth="md">
         <CssBaseline />
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <Snackbar open={error} autoHideDuration={6000} onClose={this.handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+            <Alert onClose={this.handleClose} severity="error">
+              <AlertTitle>
+                Erreur lors de l'envoi
+            </AlertTitle>
+              {this.state.message.message}
+            </Alert>
+          </Snackbar>
+          <Snackbar open={success} autoHideDuration={6000} onClose={this.handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+            <Alert onClose={this.handleClose} severity="success">
+              <AlertTitle>
+                un email vous à été envoyé
+            </AlertTitle>
+            </Alert>
+          </Snackbar>
           <Typography component="h1" variant="h5">
             Inscription
         </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={this.register} noValidate>
             <Grid container spacing={1}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -94,6 +178,8 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   id="firstName"
                   label="First Name"
                   type="text"
+                  value={this.state.firstName}
+                  onChange={this.handleChangefirstName}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -113,6 +199,8 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   label="Last Name"
                   name="lastName"
                   type="text"
+                  value={this.state.lastName}
+                  onChange={this.handleChangelastName}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -132,6 +220,8 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   label="Username"
                   name="Username"
                   type="text"
+                  value={this.state.username}
+                  onChange={this.handleChangeUsername}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -150,23 +240,25 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   id="Date"
                   name="Date"
                   type="date"
+                  value={this.state.date_naissance}
+                  onChange={this.handleChangeDate}
                   autoComplete="Date"
                 />
               </Grid>
               <Grid item xs={12} md={12}>
-              <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel>Age</InputLabel>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel htmlFor="outlined-age-native-simple">civilite</InputLabel>
                   <Select
-                    labelId="civilite"
-                    id="civilite"
-                    value={civilite}
-                    onChange={this.handleChange}
+                    native
+                    value={this.state.civilite}
+                    onChange={this.handleChangecivilite}
+                    label="Civilite"
+                    inputProps={{
+                      name: 'civilite',
+                    }}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={"Homme"}>Homme</MenuItem>
-                    <MenuItem value={"Femme"}>Femme</MenuItem>
+                    <option value={"Homme"}>Homme</option>
+                    <option value={"Femme"}>Femme</option>
                   </Select>
                 </FormControl>
               </Grid>
@@ -179,6 +271,8 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   label="Téléphone"
                   type="phone"
                   id="phone"
+                  value={this.state.phone}
+                  onChange={this.handleChangephone}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -198,6 +292,8 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   label="Email Address"
                   name="email"
                   type="email"
+                  value={this.state.email}
+                  onChange={this.handleChangeemail}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -217,6 +313,8 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   label="Password"
                   type="password"
                   id="password"
+                  value={this.state.password}
+                  onChange={this.handleChangepassword}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -236,6 +334,8 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   label="Password"
                   type="password"
                   id="password"
+                  value={this.state.password2}
+                  onChange={this.handleChangepassword2}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
