@@ -153,9 +153,9 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             <div className="control-section">
               <FileManagerComponent id="file" view="LargeIcons" ajaxSettings={{
                 getImageUrl: hostUrl + "api/FileManager/GetImage",
-                url: 'http://localhost:4000/manager',// 'http://localhost:4000/manager' ou hostUrl +"api/FileManager/FileOperations"
+                url: hostUrl +"api/FileManager/FileOperations",// 'http://localhost:4000/manager' ou hostUrl +"api/FileManager/FileOperations"
                 downloadUrl: hostUrl + 'api/FileManager/Download',
-                uploadUrl: 'http://localhost:4000/upload' ,// 'http://localhost:4000/upload'  ou hostUrl + 'api/FileManager/Upload'
+                uploadUrl: hostUrl + 'api/FileManager/Upload' ,// 'http://localhost:4000/upload'  ou hostUrl + 'api/FileManager/Upload'
               }} /*path='/download'*/
               created={this.onCreated.bind(this)}
               success={this.onSuccess.bind(this)} 
