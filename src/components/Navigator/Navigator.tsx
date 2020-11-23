@@ -48,7 +48,6 @@ export class NavigatorProps extends React.PureComponent<P & Omit<DrawerProps, 'c
   
   render(){
     const { classes, ...other } = this.props;
-    console.log('navigatorProps: ',this.props)
     return(
       <Drawer variant="permanent" {...other}>{/*retirer variant pour cacher le composant */}
       <List disablePadding>

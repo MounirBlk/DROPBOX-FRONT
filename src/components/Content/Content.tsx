@@ -12,6 +12,8 @@ import AllInboxIcon from '@material-ui/icons/AllInbox';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import { Tabs,Tab,WithStyles, withStyles,IconButton,Tooltip,Toolbar,AppBar,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, Avatar} from '@material-ui/core';
 import styles, { Styles } from './styles';
+import {  DetailsView, FileManagerComponent, NavigationPane, Toolbar as ToolbarFile, Inject, BreadCrumbBar  } from '@syncfusion/ej2-react-filemanager';
+import axios from 'axios';
 
 //props
 interface P {}
@@ -21,6 +23,7 @@ interface S {
   //mobileOpen:boolean;
   expanded: Array<string>;
   selected: Array<string>;
+  hostUrl:string;
 }
 
 export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>{
@@ -29,6 +32,8 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     super(props);
     this.state = {
       //mobileOpen: false,
+      hostUrl : "https://ej2-aspcore-service.azurewebsites.net/",
+      //hostUrl : "http://localhost:4000/",
       expanded: [],
       selected: []
     };
@@ -37,25 +42,53 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     expanded:[],
     selected:[]
   }*/
-  /*const [expanded, setExpanded] = React.useState<string[]>([]);
-  const [selected, setSelected] = React.useState<string[]>([]);*/
 
-  handleToggle = (event: React.ChangeEvent<{}>, nodeIds: string[]) => {
+  /*const [expanded, setExpanded] = React.useState<string[]>([]);*/
+
+  /*handleToggle = (event: React.ChangeEvent<{}>, nodeIds: string[]) => {
     this.setState({expanded: nodeIds})
-  };
+  };*/
 
-  handleSelect = (event: React.ChangeEvent<{}>, nodeIds: string[]) => {
-    this.setState({selected: nodeIds})
+  onCreated = (args: any) => {
+    console.log("File Manager has been created successfully: ",args);
+  };
+  onSuccess = (args: any) => {
+    console.log("Ajax request successful: ",args);
+  };
+  onFailure = (args: any) => {
+    console.log("Ajax request has failed: ",args);
   };
   test = () => {
     console.log('1: ',this.state.expanded)
     console.log('2: ',this.state.selected)
     console.log('----------')
   }
+  /*upload = (e: any): void => {
+    console.log('Upload...')
+    let files = e.target.files;
+    console.log(files);
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    let payload= {
+      isFile:true,
+      file: files[0]
+    }
+    axios.post('http://localhost:4000/upload', payload,config)
+      .then((response) => {
+        console.log('Uploaded-')
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+  }*/
 
   render(){
     const { classes } = this.props;
-    const { selected,expanded } = this.state;
+    const { selected,expanded,hostUrl } = this.state;
 
     return(
       <Paper className={classes.paper}>
@@ -80,10 +113,12 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
               </Grid>
               <Grid item>
                 <input
-                  accept="image/*"
+                  accept="*"
                   style={{ display: 'none' }}
                   id="raised-button-file"
                   multiple
+                  /*webkitdirectory
+                  directory*/
                   type="file"
                 />
                 <label htmlFor="raised-button-file">
@@ -115,30 +150,19 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
         </AppBar>
         <div className={classes.contentWrapper}>
           <Typography component={'span'} variant={'body2'} color="textSecondary" align="center">
-            <TreeView
-              className={classes.roottreeview}
-              defaultCollapseIcon={<ExpandMoreIcon />}
-              defaultExpandIcon={<ChevronRightIcon />}
-              expanded={expanded}
-              selected={selected}
-              onNodeToggle={this.handleToggle}
-              onNodeSelect={this.handleSelect}
-            >
-              <TreeItem nodeId="1" label="Applications">
-                <TreeItem nodeId="2" label="Mike.tsx" />
-                <TreeItem nodeId="3" label="Allan.xml" />
-                <TreeItem nodeId="4" label="Mounir.vue" />
-              </TreeItem>
-              <TreeItem nodeId="5" label="Documents">
-                <TreeItem nodeId="10" label="index.html" />
-                <TreeItem nodeId="6" label="Material-UI">
-                  <TreeItem nodeId="7" label="src">
-                    <TreeItem nodeId="8" label="index.js" />
-                    <TreeItem nodeId="9" label="tree-view.js" />
-                  </TreeItem>
-                </TreeItem>
-              </TreeItem>
-            </TreeView>
+            <div className="control-section">
+              <FileManagerComponent id="file" view="LargeIcons" ajaxSettings={{
+                getImageUrl: hostUrl + "api/FileManager/GetImage",
+                url: hostUrl +"api/FileManager/FileOperations",// 'http://localhost:4000/manager' ou hostUrl +"api/FileManager/FileOperations"
+                downloadUrl: hostUrl + 'api/FileManager/Download',
+                uploadUrl: hostUrl + 'api/FileManager/Upload' ,// 'http://localhost:4000/upload'  ou hostUrl + 'api/FileManager/Upload'
+              }} /*path='/download'*/
+              created={this.onCreated.bind(this)}
+              success={this.onSuccess.bind(this)} 
+              failure={this.onFailure.bind(this)}>
+              <Inject services={[NavigationPane, DetailsView, ToolbarFile, BreadCrumbBar]}/>
+              </FileManagerComponent>
+            </div>
           </Typography>
         </div>
       </Paper>
