@@ -6,6 +6,7 @@ import { createBrowserHistory } from "history";
 import { DashboardProps } from './components/Dashboard/Dashboard';
 import { ResetPassword } from './components/ResetPassword/ResetPassword';
 import { Register } from './components/Register/Register';
+import './App.css';
 
 export class App extends React.PureComponent {
   render(){
