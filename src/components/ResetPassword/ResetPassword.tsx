@@ -1,8 +1,9 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { WithStyles, withStyles, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Snackbar} from '@material-ui/core';
+import { WithStyles, withStyles, InputAdornment, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Snackbar} from '@material-ui/core';
 import MuiAlert, {Alert, AlertTitle } from '@material-ui/lab';
 import * as React from 'react'; 
 import styles, { Styles } from './styles';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import { Email } from '../../interfaces/password';
 import axios from 'axios';
 
@@ -71,11 +72,10 @@ export class ResetPassword extends React.PureComponent<P & WithStyles<Styles>, S
 
     render() {
       const { classes } = this.props;
-      const { value, message, error, success, vertical, horizontal } = this.state;
+      const {  error, success } = this.state;
       return (
         <Container component="main" maxWidth="md">
           <CssBaseline />
-
           <div className={classes.paper}>
             <Typography component="h1" variant="h5">
               Mot de passe oublié
@@ -109,6 +109,13 @@ export class ResetPassword extends React.PureComponent<P & WithStyles<Styles>, S
                     type="email"
                     value={this.state.value}
                     onChange={this.handleChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AccountCircleOutlinedIcon />
+                        </InputAdornment>
+                      ),
+                    }}
                     autoFocus
                   />
                 </Grid>
