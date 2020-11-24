@@ -3,19 +3,20 @@ import { createStyles, Theme } from '@material-ui/core';//makeStyles
 export type Styles = "root"|"title"|"submit";// add class create
 
 export default (theme: Theme) => createStyles<Styles,{}>({
-   root: {
+  root: {
     minWidth: 275,
     alignItems: 'center',
     textAlign:"center"
-  }, title: {
+  },
+  title: {
     fontSize: 44,
     alignItems: 'center',
     textAlign:"center",
     color: "#0055ff",
     paddingTop:  theme.spacing(10),
-    marginBottom:  theme.spacing(10),
+    marginBottom:  theme.spacing(10)
   },
-   submit: {
+  submit: {
           backgroundColor: "#0055ff",
           alignItems: 'center',
           textAlign:"center",
