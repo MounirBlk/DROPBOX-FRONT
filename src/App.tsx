@@ -5,6 +5,7 @@ import { Route, Link, Switch,BrowserRouter } from 'react-router-dom'
 import { DashboardProps } from './components/Dashboard/Dashboard';
 import { ResetPassword } from './components/ResetPassword/ResetPassword';
 import { Register } from './components/Register/Register';
+import './App.css';
 import { Cgu } from './components/Cgu/Cgu'
 import { Nf404 } from './components/Nf404/Nf404'
 
