@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { createStyles, Theme } from '@material-ui/core';//makeStyles
 
 export type Styles = "labelRoot" | "labelIcon" | "labelText" | "paper" | "searchBar" | "block" | "addFile" | "contentWrapper" | "roottreeview" | "secondaryBar";// add class create

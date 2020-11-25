@@ -1,11 +1,13 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { createStyles, Theme } from '@material-ui/core';//makeStyles
 
-export type Styles = "root" | "image" | "paper" | "avatar" | "form" | "submit" | "bg";// add class create
+export type Styles = "root" | "image" | "paper" | "avatar" | "form" | "submit" | "bg" | "progress";// add class create
 
 export default (theme: Theme) => createStyles<Styles,{}>({
     root: {
         height: '100vh',
+    },
+    progress: {
+        width:"100vw"
     },
     bg:{
         backgroundColor: 'lightgray',

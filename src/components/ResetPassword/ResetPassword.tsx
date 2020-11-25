@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { WithStyles, withStyles, InputAdornment, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Snackbar} from '@material-ui/core';
 import MuiAlert, {Alert, AlertTitle } from '@material-ui/lab';
 import * as React from 'react'; 

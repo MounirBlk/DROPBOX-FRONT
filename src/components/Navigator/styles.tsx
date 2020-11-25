@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { createStyles, Theme } from '@material-ui/core';//makeStyles
 
 export type Styles = "categoryHeader" | "categoryHeaderPrimary" | "item" | "itemCategory" | "firebase" | "itemActiveItem" | "itemPrimary" | "itemIcon" | "divider";// add class create

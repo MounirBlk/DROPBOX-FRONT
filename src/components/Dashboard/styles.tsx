@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { createMuiTheme, createStyles, Theme } from '@material-ui/core';//makeStyles
 
 export type Styles = "root" | "app" | "main" | "footer" | "drawer";// add class create
