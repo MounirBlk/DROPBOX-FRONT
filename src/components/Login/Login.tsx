@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
+import React from 'react';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {WithStyles, Snackbar,InputAdornment, withStyles,Grid,Typography,Box,Paper,Link,TextField,CssBaseline,Button, Avatar} from '@material-ui/core';
 import styles, { Styles } from './styles';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import MuiAlert, { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import LockOpenOutlinedIcon from '@material-ui/icons/LockOpenOutlined';
 import { UserLogin, errorRequest } from '../../interfaces/user';
 import { email, password } from '../../middleware/Verif/Verif';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import EmailIcon from '@material-ui/icons/Email';
 import axios from 'axios';
 
 
@@ -69,6 +70,15 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
       );
     }
 
+    google = () => {
+      console.log('google')
+      axios.get('http://localhost:4000/google/')
+      .then((response) => {
+        return (window.open('http://localhost:4000/google'));
+      })
+      .catch((error) => console.log(error))
+    }
+
     login = (event: any) => {
       console.log('Connexion')
       event.preventDefault();
@@ -84,7 +94,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
 
       axios.post('http://localhost:4000/login', obj)
         .then((response) => {
-          if(response.data.error != false) {
+          if(response.data.error !== false) {
             return this.setState({ errorUser: { message: response.data.response, error: true }, error: true })
           }else{
             console.log(response)
@@ -119,7 +129,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
     public static Display = withStyles(styles as any)(Login) as React.ComponentType<P>    //Methode de lecture
     render(){
         const { classes } = this.props;
-        const { error, success, progress } = this.state;
+        const { error, success } = this.state;
         return(
           <Grid container component="main" className={classes.root}>
           <CssBaseline />
@@ -195,6 +205,25 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 >
                 <LockOpenOutlinedIcon /> Connexion
                 </Button>
+                </form>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  className={classes.submit2}
+                  onClick={this.google}
+                >
+                <EmailIcon /> Connexion Google
+                </Button>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit3}
+                >
+                <FacebookIcon /> Connexion Facebook
+                </Button>
                 <Grid container>
                   <Grid item xs>
                     <Link href="#" variant="body2">
@@ -210,7 +239,6 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 <Box mt={10}>
                   { this.Copyright }
                 </Box>
-              </form>
             </div>
           </Grid>
         </Grid>
