@@ -1,15 +1,18 @@
-import React, {useState} from 'react';
+import React from 'react';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {WithStyles, Snackbar,InputAdornment, withStyles,Grid,Typography,Box,Paper,Link,TextField,CssBaseline,Button, Avatar} from '@material-ui/core';
 import styles, { Styles } from './styles';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import MuiAlert, { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import LockOpenOutlinedIcon from '@material-ui/icons/LockOpenOutlined';
 import { UserLogin, errorRequest } from '../../interfaces/user';
 import { email, password } from '../../middleware/Verif/Verif';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import EmailIcon from '@material-ui/icons/Email';
 import axios from 'axios';
+import ModeCommentIcon from '@material-ui/icons/ModeComment';
+
 
 
 //props
@@ -69,6 +72,18 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
       );
     }
 
+    google = () => {
+      document.location.href =  'http://localhost:4000/google/';
+    }
+
+    facebook = () => {
+      document.location.href =  'http://localhost:4000/facebook/';
+    }
+
+    discord = () => {
+      document.location.href =  'http://localhost:4000/discord/';
+    }
+
     login = (event: any) => {
       console.log('Connexion')
       event.preventDefault();
@@ -84,7 +99,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
 
       axios.post('http://localhost:4000/login', obj)
         .then((response) => {
-          if(response.data.error != false) {
+          if(response.data.error !== false) {
             return this.setState({ errorUser: { message: response.data.response, error: true }, error: true })
           }else{
             console.log(response)
@@ -119,9 +134,10 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
     public static Display = withStyles(styles as any)(Login) as React.ComponentType<P>    //Methode de lecture
     render(){
         const { classes } = this.props;
-        const { error, success, progress } = this.state;
+        const { error, success } = this.state;
         return(
           <Grid container component="main" className={classes.root}>
+          <script src="https://kit.fontawesome.com/b9f5a620fe.js"></script>
           <CssBaseline />
           <Grid item xs={false} sm={4} md={7} className={classes.image} />
           <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square className={classes.bg}>
@@ -129,7 +145,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
               <Snackbar open={error} autoHideDuration={6000} onClose={this.handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
               <Alert onClose={this.handleClose} severity="error">
                 <AlertTitle>
-                  Erreur !
+                  Erreur ! 
               </AlertTitle>
                 {this.state.message.message}
               </Alert>
@@ -195,6 +211,36 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 >
                 <LockOpenOutlinedIcon /> Connexion
                 </Button>
+                </form>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  className={classes.submit2}
+                  onClick={this.google}
+                >
+                <EmailIcon /> Connexion Google
+                </Button>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={this.facebook}
+                  className={classes.submit3}
+                >
+                <FacebookIcon /> Connexion Facebook
+                </Button>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  onClick={this.discord}
+                  className={classes.submit4}
+                >
+                  <ModeCommentIcon/>
+                Connexion Discord
+                </Button>
                 <Grid container>
                   <Grid item xs>
                     <Link href="#" variant="body2">
@@ -210,7 +256,6 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 <Box mt={10}>
                   { this.Copyright }
                 </Box>
-              </form>
             </div>
           </Grid>
         </Grid>
