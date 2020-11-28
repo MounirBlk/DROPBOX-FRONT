@@ -11,6 +11,8 @@ import { email, password } from '../../middleware/Verif/Verif';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import EmailIcon from '@material-ui/icons/Email';
 import axios from 'axios';
+import ModeCommentIcon from '@material-ui/icons/ModeComment';
+
 
 
 //props
@@ -71,12 +73,15 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
     }
 
     google = () => {
-      console.log('google')
-      axios.get('http://localhost:4000/google/')
-      .then((response) => {
-        return (window.open('http://localhost:4000/google'));
-      })
-      .catch((error) => console.log(error))
+      document.location.href =  'http://localhost:4000/google/';
+    }
+
+    facebook = () => {
+      document.location.href =  'http://localhost:4000/facebook/';
+    }
+
+    discord = () => {
+      document.location.href =  'http://localhost:4000/discord/';
     }
 
     login = (event: any) => {
@@ -132,6 +137,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
         const { error, success } = this.state;
         return(
           <Grid container component="main" className={classes.root}>
+          <script src="https://kit.fontawesome.com/b9f5a620fe.js"></script>
           <CssBaseline />
           <Grid item xs={false} sm={4} md={7} className={classes.image} />
           <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square className={classes.bg}>
@@ -139,7 +145,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
               <Snackbar open={error} autoHideDuration={6000} onClose={this.handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
               <Alert onClose={this.handleClose} severity="error">
                 <AlertTitle>
-                  Erreur !
+                  Erreur ! 
               </AlertTitle>
                 {this.state.message.message}
               </Alert>
@@ -220,9 +226,20 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                   fullWidth
                   variant="contained"
                   color="primary"
+                  onClick={this.facebook}
                   className={classes.submit3}
                 >
                 <FacebookIcon /> Connexion Facebook
+                </Button>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  onClick={this.discord}
+                  className={classes.submit4}
+                >
+                  <ModeCommentIcon/>
+                Connexion Discord
                 </Button>
                 <Grid container>
                   <Grid item xs>
