@@ -52,18 +52,6 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
     progress: 0
   };
 
-  LinearDeterminate = () => {
-      setInterval(() => {
-          if (this.state.progress === 100) {
-            return 0;
-          }
-          let i = 0
-          while (i <= 100) {}
-            console.log(i)
-            this.setState({ progress: i++})
-      }, 50);
-  }
-
     Copyright = () => {
       return (
           <Typography variant="body2" color="textSecondary" align="center">
@@ -102,7 +90,6 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
           if(response.data.error !== false) {
             return this.setState({ errorUser: { message: response.data.response, error: true }, error: true })
           }else{
-            console.log(response)
             this.setState({ message: { message: response.data.message, error: false, id_user: response.data.id_user, token: response.data.token}, success: true });
             localStorage.setItem("security", response.data.token)
             setTimeout(() => {
@@ -171,6 +158,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                   id="email"
                   label="Email"
                   name="email"
+                  variant="outlined"
                   autoComplete="email"
                   autoFocus
                   value={this.state.email}
@@ -191,6 +179,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                   label="Password"
                   type="password"
                   id="password"
+                  variant="outlined"
                   value={this.state.password}
                   onChange={this.handleChangepassword}
                   autoComplete="current-password"
@@ -212,6 +201,8 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 <LockOpenOutlinedIcon /> Connexion
                 </Button>
                 </form>
+                <Grid container spacing={3}>
+                <Grid item xs={12} sm={8} md={3}>
                 <Button
                   type="submit"
                   fullWidth
@@ -219,8 +210,10 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                   className={classes.submit2}
                   onClick={this.google}
                 >
-                <EmailIcon /> Connexion Google
+                <EmailIcon /> Google
                 </Button>
+                </Grid >
+                <Grid item xs={12} sm={8} md={3}>
                 <Button
                   type="submit"
                   fullWidth
@@ -229,8 +222,10 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                   onClick={this.facebook}
                   className={classes.submit3}
                 >
-                <FacebookIcon /> Connexion Facebook
+                <FacebookIcon /> Facebook
                 </Button>
+                </Grid >
+                <Grid item xs={12} sm={8} md={3}>
                 <Button
                   type="submit"
                   fullWidth
@@ -239,16 +234,18 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                   className={classes.submit4}
                 >
                   <ModeCommentIcon/>
-                Connexion Discord
+                  Discord
                 </Button>
+                </Grid>
+                </Grid>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
+                    <Link href="/resetPassword" variant="body2">
                       Mot de passe oublié ?
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link variant="body2">
+                    <Link href="/register" variant="body2">
                       {"Inscription"}
                     </Link>
                   </Grid>

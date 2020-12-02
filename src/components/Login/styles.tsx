@@ -10,7 +10,7 @@ export default (theme: Theme) => createStyles<Styles,{}>({
         width:"100vw"
     },
     bg:{
-        backgroundColor: 'lightgray',
+        backgroundColor: '#fff',
     },
     image: {
         backgroundImage: 'url(https://image.jimcdn.com/app/cms/image/transf/none/path/s4aeeaf31f631cd80/image/i54bdaac389a91c34/version/1553158243/image.jpg)',

@@ -375,6 +375,9 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   control={<Checkbox value="true" color="primary"  onChange={this.handleChangeRGPD}/>}
                   label="J'accepte les conditions d'utilisation et j'autorise Dropbox à utiliser les données a des fins d'amerioration."
                 />
+                <Link href="/RGPD" variant="body2">
+                  voir les CGUs
+                </Link>
               </Grid>
             </Grid>
             <Button
