@@ -15,8 +15,9 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { NavigatorProps } from '../Navigator/Navigator';
 import theme from './themes';
 import UpdateIcon from '@material-ui/icons/Update';
-
+import { stringVerif, email, password } from '../../middleware/Verif/Verif';
 import axios from 'axios'
+import { config } from 'process';
 
 
 interface P {}
@@ -31,7 +32,7 @@ interface S {
   email: string, 
   firstName: string, 
   lastName: string, 
-  phone: number, 
+  portable: number, 
   date_naissance: string, 
   username: string, 
   password: string, 
@@ -58,7 +59,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
     email: '', 
     firstName: '', 
     lastName: '', 
-    phone: 0, 
+    portable: 0, 
     date_naissance: '', 
     username: '', 
     password: '', 
@@ -74,7 +75,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
       url: 'http://localhost:4000/user/5fb98f0a40bf0212148f21da',
       timeout: 1000,
       headers: { 
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYjk4ZjBhNDBiZjAyMTIxNDhmMjFkYSIsImV4cCI6MTYwNjkyOTc4OCwiaWF0IjoxNjA2ODQzMzg4fQ.BumFVVras6eRfk7YyFyGqh9Br3kwYk_F1rFygCxnEmw', 
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYjk4ZjBhNDBiZjAyMTIxNDhmMjFkYSIsImV4cCI6MTYwNzEwODQ4OSwiaWF0IjoxNjA3MDIyMDg5fQ.Vs4g7FfXoppJiXNQGIAOKojzjzVrLOL3P1wRm1KwbSY', 
         'Content-Type': 'application/x-www-form-urlencoded',
       }
     };
@@ -89,7 +90,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
         email: response.data.user.email, 
         firstName: response.data.user.firstname, 
         lastName: response.data.user.lastname, 
-        phone: response.data.user.portable, 
+        portable: response.data.user.portable, 
         date_naissance: response.data.user.date_naissance, 
         username: response.data.user.username,   });
       }
@@ -99,29 +100,58 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
     });
   }
 
-    Envoi = () => {
+    Envoi = (event : any) => {
+    event.preventDefault();
+    if (stringVerif(this.state.firstName) === false)
+      this.setState({ message: { message: "Le prenom n'est pas correcte", error: true }, error: true })
+    else if (stringVerif(this.state.lastName) === false)
+      this.setState({ message: { message: "Nom de famille n'est pas correcte", error: true }, error: true })
+    else if (stringVerif(this.state.username) === false)
+      this.setState({ message: { message: "Votre surnom n'est pas correcte", error: true }, error: true })
+    else if (email(this.state.email) === false)
+      this.setState({ message: { message: "Votre email n'est pas correcte", error: true }, error: true })
+    else if (this.state.password !== this.state.password2)
+      this.setState({ message: { message: "vos mot de passe ne sont pas identique", error: true }, error: true })
+    else{
+
+      
+      var obj = {
+        civilite : this.state.civilite,
+        email : this.state.email,
+        firstname: this.state.firstName,
+        lastname:this.state.lastName,
+        portable: this.state.portable,
+        date_naissance:this.state.date_naissance,
+        username: this.state.username,
+        password: this.state.password
+      }
+
+
+      var qs = require('qs');
+      let data = qs.stringify(obj)
+
+      console.log(data);
+
       var config : any = {
         method: 'PUT',
         url: 'http://localhost:4000/user/5fb98f0a40bf0212148f21da',
         timeout: 1000,
         headers: { 
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYjk4ZjBhNDBiZjAyMTIxNDhmMjFkYSIsImV4cCI6MTYwNjkyOTc4OCwiaWF0IjoxNjA2ODQzMzg4fQ.BumFVVras6eRfk7YyFyGqh9Br3kwYk_F1rFygCxnEmw', 
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYjk4ZjBhNDBiZjAyMTIxNDhmMjFkYSIsImV4cCI6MTYwNzE3NjAwNCwiaWF0IjoxNjA3MDg5NjA0fQ.lG_5m2w4_hPS6_0_zEFblAKZPVQ3FA0vv6_vHJ_F3Lo', 
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        data: {
-          
-        }
+        data
       };
-      
+
       axios(config)
       .then((response : any) => {
-        console.log(response.data)
+        console.log(response)
       })
       .catch((error : any) => {
-        console.log(error);
-      });
- }
-
+        console.log(error.data);
+      })
+    }
+  }
 
   handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -151,7 +181,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
   }
 
   handleChangePhone = (event: any) => {
-    this.setState({ phone: event.target.value });
+    this.setState({ portable: event.target.value });
   }
 
   handleChangePassword = (event: any) => {
@@ -190,7 +220,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
 
   render() {
       const { classes } = this.props;
-      const {mobileOpen , email} = this.state;
+      const { mobileOpen } = this.state;
       return (
         <Container component="main" maxWidth="md">
           <ThemeProvider theme={theme}>
@@ -213,8 +243,8 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
               <Typography variant="h2" component="h5" className={classes.title} color="primary" gutterBottom>
                 Votre Profil
                 <hr/>
-                <p>Modifier ou supprimer votre compte !</p>
               </Typography>
+              <form onSubmit={this.Envoi} noValidate>
               <Grid container spacing={1}>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -317,7 +347,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
                     label="Téléphone"
                     type="phone"
                     id="phone"
-                    value={this.state.phone}
+                    value={this.state.portable}
                     onChange={this.handleChangePhone}
                     InputProps={{
                       startAdornment: (
@@ -400,11 +430,12 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <Box  component="span" display={this.state.display}>
-                    <Button fullWidth className={classes.btnEditer} ><UpdateIcon/> Modifier mon profile </Button>
+                    <Button type="submit" fullWidth className={classes.btnEditer} ><UpdateIcon/> Modifier mon profile </Button>
                   </Box>
                 </Grid>
               </Grid> 
-              <Box mt={5}>
+              </form>
+              <Box mt={10}>
           {this.Copyright}
         </Box>
         </ThemeProvider>
