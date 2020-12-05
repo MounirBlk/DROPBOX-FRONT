@@ -137,7 +137,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
         url: 'http://localhost:4000/user/5fb98f0a40bf0212148f21da',
         timeout: 1000,
         headers: { 
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYjk4ZjBhNDBiZjAyMTIxNDhmMjFkYSIsImV4cCI6MTYwNzE3NjAwNCwiaWF0IjoxNjA3MDg5NjA0fQ.lG_5m2w4_hPS6_0_zEFblAKZPVQ3FA0vv6_vHJ_F3Lo', 
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYjk4ZjBhNDBiZjAyMTIxNDhmMjFkYSIsImV4cCI6MTYwNzI0NDU1NCwiaWF0IjoxNjA3MTU4MTU0fQ.fPzTkZm8yrhJXNDhRa-Yq8C0FfglI2SzKk701uR5Wz0', 
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         data
@@ -145,10 +145,16 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
 
       axios(config)
       .then((response : any) => {
-        console.log(response)
+        if(response.data.error != false) {
+          return this.setState({ message: { message: response.data.message, error: true }, error: true })
+        }else{
+          this.setState({ message: { message: "modification prise en compte", error: false }, success: true });
+          setTimeout(() => {
+            document.location.href = "/user"
+          }, 3500);}
       })
       .catch((error : any) => {
-        console.log(error.data);
+        this.setState({ message: { message: "erreur serveur", error: true }, error: true })
       })
     }
   }
@@ -220,7 +226,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
 
   render() {
       const { classes } = this.props;
-      const { mobileOpen } = this.state;
+      const { mobileOpen, error, success  } = this.state;
       return (
         <Container component="main" maxWidth="md">
           <ThemeProvider theme={theme}>
@@ -244,6 +250,21 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
                 Votre Profil
                 <hr/>
               </Typography>
+                <Snackbar open={error} autoHideDuration={6000} onClose={this.handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+                  <Alert onClose={this.handleClose} severity="error">
+                    <AlertTitle>
+                      Erreur lors de la modification
+                  </AlertTitle>
+                    {this.state.message.message}
+                  </Alert>
+                </Snackbar>
+                <Snackbar open={success} autoHideDuration={6000} onClose={this.handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+                  <Alert onClose={this.handleClose} severity="success">
+                    <AlertTitle>
+                     Modification successful
+                  </AlertTitle>
+                  </Alert>
+              </Snackbar>
               <form onSubmit={this.Envoi} noValidate>
               <Grid container spacing={1}>
                 <Grid item xs={12} sm={6}>
