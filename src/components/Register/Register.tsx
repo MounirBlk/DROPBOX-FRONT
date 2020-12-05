@@ -88,7 +88,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
       axios.post('http://localhost:4000/register', obj)
         .then((response) => {
           if(response.data.error != false) {
-            return this.setState({ message: { message: response.data.response, error: true }, error: true })
+            return this.setState({ message: { message: response.data.message, error: true }, error: true })
           }else{
             this.setState({ message: { message: "un email vous à été transmis", error: false }, success: true });
             setTimeout(() => {
@@ -96,7 +96,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
             }, 3500);}
         })
         .catch((error) => {
-          this.setState({ message: { message: "aucun compte n'a été trouver", error: true }, error: true })
+          this.setState({ message: { message: "erreur serveur", error: true }, error: true })
         });
     }
   };
@@ -375,6 +375,9 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   control={<Checkbox value="true" color="primary"  onChange={this.handleChangeRGPD}/>}
                   label="J'accepte les conditions d'utilisation et j'autorise Dropbox à utiliser les données a des fins d'amerioration."
                 />
+                <Link href="/RGPD" variant="body2">
+                  voir les CGUs
+                </Link>
               </Grid>
             </Grid>
             <Button

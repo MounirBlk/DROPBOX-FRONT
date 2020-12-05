@@ -6,7 +6,7 @@ import Drawer, { DrawerProps } from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import {Link, ListItemText} from '@material-ui/core/';
 import ListItemLink  from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
@@ -77,11 +77,11 @@ export class NavigatorProps extends React.PureComponent<P & Omit<DrawerProps, 'c
                 {id}
               </ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active }) => (
+            {children.map(({ id: childId, icon }) => (
               <ListItem
                 key={childId}
                 button
-                className={clsx(classes.item, active && classes.itemActiveItem)}
+                className={clsx(classes.item && classes.itemActiveItem)}
               >
                 <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
                 <ListItemText
@@ -89,7 +89,7 @@ export class NavigatorProps extends React.PureComponent<P & Omit<DrawerProps, 'c
                     primary: classes.itemPrimary,
                   }}
                 >
-                  {childId}
+                  <Link>{childId}</Link>
                 </ListItemText>
               </ListItem>
             ))}
@@ -106,10 +106,10 @@ const categories = [
   {
     id: 'Menu',
     children: [
-      { id: 'Dropbox', icon: <MoveToInboxIcon />, active: true },
-      { id: 'Utilisateur', icon: <AccountCircleIcon /> },
-      { id: 'Paramètres', icon: <SettingsOutlinedIcon /> },
-      { id: 'Support', icon: <HelpOutlineTwoToneIcon /> },
+      { id: 'Dropbox', icon: <MoveToInboxIcon />},
+      { id: 'Utilisateur', icon: <AccountCircleIcon />},
+      { id: 'Paramètres', icon: <SettingsOutlinedIcon />},
+      { id: 'Support', icon: <HelpOutlineTwoToneIcon />},
     ],
   },
   /*{
