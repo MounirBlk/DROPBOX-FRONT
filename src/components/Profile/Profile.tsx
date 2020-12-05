@@ -75,7 +75,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
       url: 'http://localhost:4000/user/5fb98f0a40bf0212148f21da',
       timeout: 1000,
       headers: { 
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYjk4ZjBhNDBiZjAyMTIxNDhmMjFkYSIsImV4cCI6MTYwNzEwODQ4OSwiaWF0IjoxNjA3MDIyMDg5fQ.Vs4g7FfXoppJiXNQGIAOKojzjzVrLOL3P1wRm1KwbSY', 
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYjk4ZjBhNDBiZjAyMTIxNDhmMjFkYSIsImV4cCI6MTYwNzI0NDU1NCwiaWF0IjoxNjA3MTU4MTU0fQ.fPzTkZm8yrhJXNDhRa-Yq8C0FfglI2SzKk701uR5Wz0', 
         'Content-Type': 'application/x-www-form-urlencoded',
       }
     };
@@ -272,7 +272,6 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
                     autoComplete="fname"
                     name="firstName"
                     variant="outlined"
-                    required
                     fullWidth
                     disabled={this.state.isActive}
                     id="firstName"
