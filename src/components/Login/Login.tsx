@@ -217,12 +217,14 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                   type="submit"
                   fullWidth
                   variant="contained"
-                  className={classes.submit2}
-                  onClick={this.google}
+                  onClick={this.twitch}
+                  className={classes.submit5}
                 >
-                <EmailIcon /> Google
+                  <ForumIcon/>
+                  Twitch
                 </Button>
-                </Grid >
+                </Grid>
+               
                 <Grid item xs={12} sm={8} md={4}>
                 <Button
                   type="submit"
@@ -252,13 +254,12 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                   type="submit"
                   fullWidth
                   variant="contained"
-                  onClick={this.twitch}
-                  className={classes.submit5}
+                  className={classes.submit2}
+                  onClick={this.google}
                 >
-                  <ForumIcon/>
-                  Twitch
+                <EmailIcon /> Google
                 </Button>
-                </Grid>
+                </Grid >
                 <Grid item xs={12} sm={8} md={6}>
                 <Button
                   type="submit"
