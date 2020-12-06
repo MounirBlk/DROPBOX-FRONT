@@ -12,6 +12,7 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import EmailIcon from '@material-ui/icons/Email';
 import axios from 'axios';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
+import ForumIcon from '@material-ui/icons/Forum';
 
 
 
@@ -72,6 +73,10 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
       document.location.href =  'http://localhost:4000/discord/';
     }
 
+    twitch = () => {
+      document.location.href =  'http://localhost:4000/twitch/';
+    }
+
     login = (event: any) => {
       console.log('Connexion')
       event.preventDefault();
@@ -88,13 +93,13 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
       axios.post('http://localhost:4000/login', obj)
         .then((response) => {
           if(response.data.error !== false) {
-            return this.setState({ errorUser: { message: response.data.response, error: true }, error: true })
+            return this.setState({ errorUser: { message: response.data.message, error: true }, error: true })
           }else{
             this.setState({ message: { message: response.data.message, error: false, id_user: response.data.id_user, token: response.data.token}, success: true });
             localStorage.setItem("security", response.data.token)
             setTimeout(() => {
               document.location.href = "/dashboard"
-            }, 300000);
+            }, 3000);
           }
         })
         .catch((error) => {
@@ -134,7 +139,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 <AlertTitle>
                   Erreur ! 
               </AlertTitle>
-                {this.state.message.message}
+                {this.state.errorUser.message}
               </Alert>
             </Snackbar>
             <Snackbar open={success} autoHideDuration={6000} onClose={this.handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
@@ -235,6 +240,18 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 >
                   <ModeCommentIcon/>
                   Discord
+                </Button>
+                </Grid>
+                <Grid item xs={12} sm={8} md={3}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  onClick={this.twitch}
+                  className={classes.submit5}
+                >
+                  <ForumIcon/>
+                  Twitch
                 </Button>
                 </Grid>
                 </Grid>
