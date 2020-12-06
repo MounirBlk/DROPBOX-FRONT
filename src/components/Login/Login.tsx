@@ -13,6 +13,7 @@ import EmailIcon from '@material-ui/icons/Email';
 import axios from 'axios';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
 import ForumIcon from '@material-ui/icons/Forum';
+import GitHubIcon from '@material-ui/icons/GitHub';
 
 
 
@@ -75,6 +76,10 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
 
     twitch = () => {
       document.location.href =  'http://localhost:4000/twitch/';
+    }
+
+    github = () => {
+      document.location.href =  'http://localhost:4000/github/';
     }
 
     login = (event: any) => {
@@ -207,7 +212,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 </Button>
                 </form>
                 <Grid container spacing={3}>
-                <Grid item xs={12} sm={8} md={3}>
+                <Grid item xs={12} sm={8} md={4}>
                 <Button
                   type="submit"
                   fullWidth
@@ -218,7 +223,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 <EmailIcon /> Google
                 </Button>
                 </Grid >
-                <Grid item xs={12} sm={8} md={3}>
+                <Grid item xs={12} sm={8} md={4}>
                 <Button
                   type="submit"
                   fullWidth
@@ -230,7 +235,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 <FacebookIcon /> Facebook
                 </Button>
                 </Grid >
-                <Grid item xs={12} sm={8} md={3}>
+                <Grid item xs={12} sm={8} md={4}>
                 <Button
                   type="submit"
                   fullWidth
@@ -242,7 +247,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                   Discord
                 </Button>
                 </Grid>
-                <Grid item xs={12} sm={8} md={3}>
+                <Grid item xs={12} sm={8} md={6}>
                 <Button
                   type="submit"
                   fullWidth
@@ -252,6 +257,18 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 >
                   <ForumIcon/>
                   Twitch
+                </Button>
+                </Grid>
+                <Grid item xs={12} sm={8} md={6}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  onClick={this.github}
+                  className={classes.submit6}
+                >
+                  <GitHubIcon/>
+                  Github
                 </Button>
                 </Grid>
                 </Grid>
