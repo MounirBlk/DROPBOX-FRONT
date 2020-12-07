@@ -18,6 +18,8 @@ import UpdateIcon from '@material-ui/icons/Update';
 import { stringVerif, email, password } from '../../middleware/Verif/Verif';
 import axios from 'axios'
 import { config } from 'process';
+import {Menu} from "../Menu/Menu";
+
 
 
 interface P {}
@@ -228,22 +230,13 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
       const { classes } = this.props;
       const { mobileOpen, error, success  } = this.state;
       return (
+        <div>
+          <nav>
+            <Menu.Display />
+          </nav>
         <Container component="main" maxWidth="md">
           <ThemeProvider theme={theme}>
           <CssBaseline />
-            <nav className={classes.drawer}>
-              <Hidden smUp implementation="js">
-                <NavigatorProps.Display
-                  PaperProps={{ style: { width: 200 } }}
-                  variant="temporary"
-                  open={mobileOpen}
-                  onClose={this.handleDrawerToggle}
-                />
-              </Hidden>
-              <Hidden xsDown implementation="css">
-                <NavigatorProps.Display PaperProps={{ style: { width: 200 } }} />
-              </Hidden>
-            </nav>
               <Button color="primary" href="/dashboard"><ArrowBackIcon/>  Retour </Button>
               <br/><br/><br/>
               <Typography variant="h2" component="h5" className={classes.title} color="primary" gutterBottom>
@@ -460,6 +453,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
         </Box>
         </ThemeProvider>
         </Container>
+        </div>
       );
     }
   }
