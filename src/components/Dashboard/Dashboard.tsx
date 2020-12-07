@@ -11,7 +11,7 @@ import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import { NavigatorProps } from '../Navigator/Navigator';
-//import { ContentProps } from '../Content/Content';
+import { ContentProps } from '../Content/Content';
 import { HeaderProps } from '../Header/Header';
 import styles, { Styles } from './styles';
 import theme from './themes'
@@ -69,7 +69,7 @@ export class DashboardProps extends React.PureComponent<P & WithStyles<Styles>, 
           <div className={classes.app}>
             <HeaderProps.Display onDrawerToggle={this.handleDrawerToggle}  />
             <main className={classes.main}>
-              {/* <ContentProps.Display /> */}
+              { <ContentProps.Display /> }
             </main>
             <footer className={classes.footer}>
               { this.Copyright() }
