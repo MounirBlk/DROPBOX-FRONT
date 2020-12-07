@@ -1,6 +1,6 @@
 import { createStyles, Theme } from '@material-ui/core';//makeStyles
 
-export type Styles = "root" | "image" | "paper" | "avatar" | "form" | "submit" |"submit2" |"submit3" |"submit4" | "bg" | "progress" ;// add class create
+export type Styles = "root" | "image" | "paper" | "avatar" | "form" | "submit" |"submit2" |"submit3" |"submit4" |"submit5" |"submit6" | "bg" | "progress" ;// add class create
 
 export default (theme: Theme) => createStyles<Styles,{}>({
     root: {
@@ -36,16 +36,30 @@ export default (theme: Theme) => createStyles<Styles,{}>({
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
+        color: "#fff"
     },
     submit2: {
         margin: theme.spacing(3, 0, 2),
-        background: "#ddd"
+        background: "#aaa",
+        color: "#fff"
     },submit3: {
         margin: theme.spacing(3, 0, 2),
-        background: "#11d"
+        background: "#11d",
+        color: "#fff"
     },
     submit4: {
         margin: theme.spacing(3, 0, 2),
-        background: "#7289da"
+        background: "#7289da",
+        color: "#fff"
+    },
+    submit5: {
+        margin: theme.spacing(3, 0, 2),
+        background: "#7200ff",
+        color: "#fff"
+    },
+    submit6: {
+        margin: theme.spacing(3, 0, 2),
+        background: "#000",
+        color: "#fff"
     }
 });
