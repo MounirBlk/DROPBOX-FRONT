@@ -11,6 +11,11 @@ import {
 } from "@material-ui/core";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import DraftsIcon from "@material-ui/icons/Drafts";
+import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
+import HttpIcon from '@material-ui/icons/Http';
+
+
 
 interface P {
   toggleDrawerHandler: any,
@@ -32,26 +37,26 @@ public static Display = withStyles(styles as any)(DrawerComponent) as React.Comp
         onKeyDown={this.props.toggleDrawerHandler}
       >
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Dropbox" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon>
+              <AccountCircleOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary="Profile" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon>
+              <HttpIcon />
+            </ListItemIcon>
+            <ListItemText primary="Documentation Api" />
+          </ListItem>   
         </List>
         <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
       </div>
     );
 

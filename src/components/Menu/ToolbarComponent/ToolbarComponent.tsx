@@ -15,6 +15,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 interface P {
   openDrawerHandler: any
@@ -42,27 +43,28 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
     
       handleMobileMenuClose = () => {
         this.setState({
-          mobileMoreAnchorEl: null
+          MobileMoreAnchorEl: null
         });
       };
     
       handleMenuClose = () => {
         this.setState({
           anchorEl: null,
-          mobileMoreAnchorEl: null
+          MobileMoreAnchorEl: null
         });
       };
     
       handleMobileMenuOpen = (event:any) => {
+        console.log( event.currentTarget);
         this.setState({
-          mobileMoreAnchorEl: event.currentTarget
+          MobileMoreAnchorEl: event.currentTarget
         });
       };
     
       render() {
         const { classes } = this.props;
-        const isMenuOpen = Boolean(this.state.anchorEl);
-        const isMobileMenuOpen = Boolean(this.state.MobileMoreAnchorEl);
+        const isMenuOpen = this.state.anchorEl;
+        const isMobileMenuOpen = this.state.MobileMoreAnchorEl;
     
         const menuId = "primary-search-account-menu";
         const renderMenu = (
@@ -75,8 +77,15 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
             open={isMenuOpen}
             onClose={this.handleMenuClose}
           >
-            <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+            <MenuItem onClick={this.handleMenuClose}><IconButton
+                aria-label="Deconnexion"
+                aria-controls="Deconnexion"
+                aria-haspopup="true"
+                color="inherit"
+              >
+                <PowerSettingsNewIcon />
+              </IconButton>
+              <p>Deconnexion</p></MenuItem>
           </Menu>
         );
     
@@ -91,32 +100,16 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
             open={isMobileMenuOpen}
             onClose={this.handleMobileMenuClose}
           >
-            <MenuItem>
-              <IconButton aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <p>Messages</p>
-            </MenuItem>
-            <MenuItem>
-              <IconButton aria-label="show 11 new notifications" color="inherit">
-                <Badge badgeContent={11} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <p>Notifications</p>
-            </MenuItem>
             <MenuItem onClick={this.handleProfileMenuOpen}>
               <IconButton
-                aria-label="account of current user"
-                aria-controls="primary-search-account-menu"
+                aria-label="Deconnexion"
+                aria-controls="Deconnexion"
                 aria-haspopup="true"
                 color="inherit"
               >
-                <AccountCircle />
+                <PowerSettingsNewIcon />
               </IconButton>
-              <p>Profile</p>
+              <p>Deconnexion</p>
             </MenuItem>
           </Menu>
         );
@@ -135,23 +128,10 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
                   <MenuIcon />
                 </IconButton>
                 <Typography className={classes.title} variant="h6" noWrap>
-                  Material-UI
+                  Dropbox
                 </Typography>
                 <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
-                  <IconButton aria-label="show 4 new mails" color="inherit">
-                    <Badge badgeContent={4} color="secondary">
-                      <MailIcon />
-                    </Badge>
-                  </IconButton>
-                  <IconButton
-                    aria-label="show 17 new notifications"
-                    color="inherit"
-                  >
-                    <Badge badgeContent={17} color="secondary">
-                      <NotificationsIcon />
-                    </Badge>
-                  </IconButton>
                   <IconButton
                     edge="end"
                     aria-label="account of current user"

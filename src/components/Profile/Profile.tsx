@@ -237,8 +237,6 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
         <Container component="main" maxWidth="md">
           <ThemeProvider theme={theme}>
           <CssBaseline />
-              <Button color="primary" href="/dashboard"><ArrowBackIcon/>  Retour </Button>
-              <br/><br/><br/>
               <Typography variant="h2" component="h5" className={classes.title} color="primary" gutterBottom>
                 Votre Profil
                 <hr/>
