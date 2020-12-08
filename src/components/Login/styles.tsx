@@ -35,30 +35,27 @@ export default (theme: Theme) => createStyles<Styles,{}>({
         marginTop: theme.spacing(1),
     },
     submit: {
-        margin: theme.spacing(3, 0, 2),
+        marginBottom: theme.spacing(3),
         color: "#fff"
     },
     submit2: {
-        margin: theme.spacing(3, 0, 2),
         background: "#aaa",
         color: "#fff"
-    },submit3: {
-        margin: theme.spacing(3, 0, 2),
+    },
+    submit3: {
         background: "#11d",
         color: "#fff"
     },
     submit4: {
-        margin: theme.spacing(3, 0, 2),
         background: "#7289da",
         color: "#fff"
     },
     submit5: {
-        margin: theme.spacing(3, 0, 2),
         background: "#7200ff",
         color: "#fff"
     },
     submit6: {
-        margin: theme.spacing(3, 0, 2),
+        marginBottom: theme.spacing(3),
         background: "#000",
         color: "#fff"
     }
