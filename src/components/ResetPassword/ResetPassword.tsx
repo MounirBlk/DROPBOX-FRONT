@@ -137,7 +137,7 @@ export class ResetPassword extends React.PureComponent<P & WithStyles<Styles>, S
               </Grid>
             </form>
           </div>
-          <Box>
+          <Box mt={10}>
             {this.Copyright}
           </Box>
         </Container>

@@ -12,7 +12,6 @@ export default (theme: Theme) => createStyles<Styles,{}>({
       avatar: {
         margin: theme.spacing(1),
         padding:"3%",
-        backgroundColor: "#0055ff",
       },
       form: {
         width: '100%', // Fix IE 11 issue.
@@ -20,7 +19,6 @@ export default (theme: Theme) => createStyles<Styles,{}>({
       },
       submit: {
           margin: theme.spacing(3, 0, 2),
-          backgroundColor: "#0055ff",
       },
       formControl: {
         minWidth: "100%",

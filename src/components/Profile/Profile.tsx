@@ -18,6 +18,8 @@ import UpdateIcon from '@material-ui/icons/Update';
 import { stringVerif, email, password } from '../../middleware/Verif/Verif';
 import axios from 'axios'
 import { config } from 'process';
+import {Menu} from "../Menu/Menu";
+
 
 
 interface P {}
@@ -228,24 +230,14 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
       const { classes } = this.props;
       const { mobileOpen, error, success  } = this.state;
       return (
+
+        <div className={classes.div}>
+        <nav>
+          <Menu.Display />
+        </nav>
         <Container component="main" maxWidth="md">
           <ThemeProvider theme={theme}>
           <CssBaseline />
-            <nav className={classes.drawer}>
-              <Hidden smUp implementation="js">
-                <NavigatorProps.Display
-                  PaperProps={{ style: { width: 200 } }}
-                  variant="temporary"
-                  open={mobileOpen}
-                  onClose={this.handleDrawerToggle}
-                />
-              </Hidden>
-              <Hidden xsDown implementation="css">
-                <NavigatorProps.Display PaperProps={{ style: { width: 200 } }} />
-              </Hidden>
-            </nav>
-              <Button color="primary" href="/dashboard"><ArrowBackIcon/>  Retour </Button>
-              <br/><br/><br/>
               <Typography variant="h2" component="h5" className={classes.title} color="primary" gutterBottom>
                 Votre Profil
                 <hr/>
@@ -261,7 +253,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
                 <Snackbar open={success} autoHideDuration={6000} onClose={this.handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
                   <Alert onClose={this.handleClose} severity="success">
                     <AlertTitle>
-                     Modification successful
+                      Modification successful
                   </AlertTitle>
                   </Alert>
               </Snackbar>
@@ -446,11 +438,11 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
                   <Button fullWidth className={classes.btnDelete}><DeleteForeverIcon/> Supprimer mon profile </Button>
                 </Grid>
                 <Grid item  xs={12} md={4}>
-                  <Button fullWidth className={classes.btnEditer} onClick={this.handleChangeInput}><EditAttributesIcon/> Editer mon profile </Button>
+                  <Button fullWidth className={classes.btnEditer} color="primary" onClick={this.handleChangeInput}><EditAttributesIcon/> Editer mon profile </Button>
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <Box  component="span" display={this.state.display}>
-                    <Button type="submit" fullWidth className={classes.btnEditer} ><UpdateIcon/> Modifier mon profile </Button>
+                    <Button type="submit" fullWidth color="primary" className={classes.btnEditer} ><UpdateIcon/> Modifier mon profile </Button>
                   </Box>
                 </Grid>
               </Grid> 
@@ -460,6 +452,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
         </Box>
         </ThemeProvider>
         </Container>
+      </div>
       );
     }
   }
