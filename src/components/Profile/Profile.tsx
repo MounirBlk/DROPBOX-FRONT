@@ -18,6 +18,8 @@ import UpdateIcon from '@material-ui/icons/Update';
 import { stringVerif, email, password } from '../../middleware/Verif/Verif';
 import axios from 'axios'
 import { config } from 'process';
+import {Menu} from "../Menu/Menu";
+
 
 
 interface P {}
@@ -228,7 +230,11 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
       const { classes } = this.props;
       const { mobileOpen, error, success  } = this.state;
       return (
+
         <div className={classes.div}>
+        <nav>
+          <Menu.Display />
+        </nav>
         <Container component="main" maxWidth="md">
           <ThemeProvider theme={theme}>
           <CssBaseline />
