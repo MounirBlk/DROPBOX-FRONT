@@ -230,10 +230,11 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
       const { classes } = this.props;
       const { mobileOpen, error, success  } = this.state;
       return (
-        <div>
-          <nav>
-            <Menu.Display />
-          </nav>
+
+        <div className={classes.div}>
+        <nav>
+          <Menu.Display />
+        </nav>
         <Container component="main" maxWidth="md">
           <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -252,7 +253,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
                 <Snackbar open={success} autoHideDuration={6000} onClose={this.handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
                   <Alert onClose={this.handleClose} severity="success">
                     <AlertTitle>
-                     Modification successful
+                      Modification successful
                   </AlertTitle>
                   </Alert>
               </Snackbar>
@@ -437,11 +438,11 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
                   <Button fullWidth className={classes.btnDelete}><DeleteForeverIcon/> Supprimer mon profile </Button>
                 </Grid>
                 <Grid item  xs={12} md={4}>
-                  <Button fullWidth className={classes.btnEditer} onClick={this.handleChangeInput}><EditAttributesIcon/> Editer mon profile </Button>
+                  <Button fullWidth className={classes.btnEditer} color="primary" onClick={this.handleChangeInput}><EditAttributesIcon/> Editer mon profile </Button>
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <Box  component="span" display={this.state.display}>
-                    <Button type="submit" fullWidth className={classes.btnEditer} ><UpdateIcon/> Modifier mon profile </Button>
+                    <Button type="submit" fullWidth color="primary" className={classes.btnEditer} ><UpdateIcon/> Modifier mon profile </Button>
                   </Box>
                 </Grid>
               </Grid> 
@@ -451,7 +452,7 @@ export class Profile extends React.PureComponent<P & WithStyles<Styles>, S> {
         </Box>
         </ThemeProvider>
         </Container>
-        </div>
+      </div>
       );
     }
   }

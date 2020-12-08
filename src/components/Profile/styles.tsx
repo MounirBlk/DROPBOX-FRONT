@@ -1,11 +1,14 @@
 import { createStyles, Theme } from '@material-ui/core';//makeStyles
 
-export type Styles = "pos" | "root" | "title" | "btnEditer" | "btnDelete" |"formControl" | "selectEmpty" | "drawer";// add class create
+export type Styles = "pos" |  "div" | "root" | "title" | "btnEditer" | "btnDelete" |"formControl" | "selectEmpty" | "drawer";// add class create
 
 export default (theme: Theme) => createStyles<Styles,{}>({
     root: {
         minWidth: 275,
         marginTop: theme.spacing(4)
+        },
+        div:{
+            marginTop: "10%"
         },
     title: {
         fontSize: 45,
@@ -14,11 +17,12 @@ export default (theme: Theme) => createStyles<Styles,{}>({
         marginBottom: 12,
     },
     btnEditer:{
+        marginTop: theme.spacing(4),
         color: '#fff',
-        backgroundColor: '#0055ff',
+        backgroundColor: '#3f51b5',
         '&:hover':{
-            color: '#0055ff',
-            backgroundColor: '#fff'
+            color: '#fff',
+            backgroundColor: '#2277aa'
         }
     },
     formControl: {
@@ -26,11 +30,12 @@ export default (theme: Theme) => createStyles<Styles,{}>({
         MarginBottom: theme.spacing(1)
       },
     btnDelete:{
+        marginTop: theme.spacing(4),
         color: '#fff',
-        backgroundColor: '#ff3333',
+        backgroundColor: '#ff2222',
         '&:hover':{
-            color: '#ff3333',
-            backgroundColor: '#fff'
+            color: '#fff',
+            backgroundColor: '#ff7777'
         }
     },
     selectEmpty: {
