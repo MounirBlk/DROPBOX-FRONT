@@ -76,6 +76,7 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
             transformOrigin={{ vertical: "top", horizontal: "right" }}
             open={isMenuOpen}
             onClose={this.handleMenuClose}
+
           >
             <MenuItem onClick={this.handleMenuClose}><IconButton
                 aria-label="Deconnexion"
@@ -96,6 +97,7 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
             id={mobileMenuId}
             keepMounted
+            color="primary"
             transformOrigin={{ vertical: "top", horizontal: "right" }}
             open={isMobileMenuOpen}
             onClose={this.handleMobileMenuClose}
@@ -115,8 +117,8 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
         );
     
         return (
-          <div className={classes.grow}>
-            <AppBar position="static">
+          <div className={classes.grow}  color="primary">
+            <AppBar position="static" color="primary">
               <Toolbar>
                 <IconButton
                   edge="start"

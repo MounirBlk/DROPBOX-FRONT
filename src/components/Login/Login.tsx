@@ -10,6 +10,7 @@ import { UserLogin, errorRequest } from '../../interfaces/user';
 import { email, password } from '../../middleware/Verif/Verif';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import EmailIcon from '@material-ui/icons/Email';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import axios from 'axios';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
 import ForumIcon from '@material-ui/icons/Forum';
@@ -68,6 +69,10 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
 
     facebook = () => {
       document.location.href =  'http://localhost:4000/facebook/';
+    }
+
+    linkedin = () => {
+      document.location.href =  'http://localhost:4000/linkedin/';
     }
 
     discord = () => {
@@ -134,7 +139,6 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
         const { error, success } = this.state;
         return(
           <Grid container component="main" className={classes.root}>
-          <script src="https://kit.fontawesome.com/b9f5a620fe.js"></script>
           <CssBaseline />
           <Grid item xs={false} sm={4} md={7} className={classes.image} />
           <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square className={classes.bg}>
@@ -249,7 +253,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                   Discord
                 </Button>
                 </Grid>
-                <Grid item xs={12} sm={8} md={6}>
+                <Grid item xs={12} sm={8} md={4}>
                 <Button
                   type="submit"
                   fullWidth
@@ -260,7 +264,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 <EmailIcon /> Google
                 </Button>
                 </Grid >
-                <Grid item xs={12} sm={8} md={6}>
+                <Grid item xs={12} sm={8} md={4}>
                 <Button
                   type="submit"
                   fullWidth
@@ -270,6 +274,18 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 >
                   <GitHubIcon/>
                   Github
+                </Button>
+                </Grid>
+                <Grid item xs={12} sm={8} md={4}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  onClick={this.linkedin}
+                  className={classes.submit7}
+                >
+                  <LinkedInIcon/>
+                  Linkedin
                 </Button>
                 </Grid>
                 </Grid>

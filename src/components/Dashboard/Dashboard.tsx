@@ -15,6 +15,8 @@ import { ContentProps } from '../Content/Content';
 import { HeaderProps } from '../Header/Header';
 import styles, { Styles } from './styles';
 import theme from './themes'
+import {Menu} from "../Menu/Menu";
+
 //props{}
 interface P {}
 
@@ -50,22 +52,11 @@ export class DashboardProps extends React.PureComponent<P & WithStyles<Styles>, 
       const { mobileOpen } = this.state;
       
       return(
+        <div>
+        <Menu.Display/>
         <ThemeProvider theme={theme}>
         <div className={classes.root}>
           <CssBaseline />
-          <nav className={classes.drawer}>
-            <Hidden smUp implementation="js">
-              <NavigatorProps.Display
-                PaperProps={{ style: { width: 200 } }}
-                variant="temporary"
-                open={mobileOpen}
-                onClose={this.handleDrawerToggle}
-              />
-            </Hidden>
-            <Hidden xsDown implementation="css">
-              <NavigatorProps.Display PaperProps={{ style: { width: 200 } }} />
-            </Hidden>
-          </nav>
           <div className={classes.app}>
             <HeaderProps.Display onDrawerToggle={this.handleDrawerToggle}  />
             <main className={classes.main}>
@@ -76,7 +67,7 @@ export class DashboardProps extends React.PureComponent<P & WithStyles<Styles>, 
             </footer>
           </div>
         </div>
-      </ThemeProvider>
+      </ThemeProvider></div>
       )
     }
 }

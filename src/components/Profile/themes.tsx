@@ -4,7 +4,7 @@ let theme = createMuiTheme({
     palette: {
         primary: {
             light: '#63ccff',
-            main: '#3f51b5',
+            main: '#009be5',
             dark: '#006db3',
         },
     },
@@ -57,7 +57,7 @@ let theme = createMuiTheme({
             height: 3,
             borderTopLeftRadius: 3,
             borderTopRightRadius: 3,
-            backgroundColor: theme.palette.common.white,
+            backgroundColor: "#009be5",
         },
         },
         MuiTab: {
@@ -84,7 +84,7 @@ let theme = createMuiTheme({
         },
         MuiDivider: {
             root: {
-                backgroundColor: '#404854',
+                backgroundColor: '#009be5',
             },
         },
         MuiListItemText: {
