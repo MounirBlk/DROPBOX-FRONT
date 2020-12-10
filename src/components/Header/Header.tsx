@@ -42,30 +42,6 @@ export class HeaderProps extends React.PureComponent<P & WithStyles<Styles>, S>{
           position="static"
           elevation={0}
         >
-          <Toolbar>
-            <Grid container alignItems="center" spacing={1}>
-              <Grid item>
-                <InsertEmoticonIcon color="inherit" />
-              </Grid>
-              <Grid item xs>
-                <Typography color="inherit" variant="h6" component="h1">
-                  Bonjour et bienvenue sur notre application
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Button className={classes.button} variant="outlined" color="inherit" size="small">
-                  Paramètres
-                </Button>
-              </Grid>
-              <Grid item>
-                <Tooltip title="Deconnexion">
-                  <IconButton color="secondary">
-                    <MeetingRoomOutlinedIcon />
-                  </IconButton>
-                </Tooltip>
-              </Grid>
-            </Grid>
-          </Toolbar>
         </AppBar>
       </React.Fragment>
     );
