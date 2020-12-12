@@ -7,30 +7,18 @@ const  PrivateRoute: React.FC<{
         exact: boolean;
     }> = (props) => {
     
-    const performValidationHere = (fn : any) => {
-        return fn
-    }
+    const performValidationHere = () => {
+        if(localStorage.getItem("security") !== sessionStorage.getItem("security2") || localStorage.getItem("security") === null || sessionStorage.getItem("security2") === null)
+        {
+            localStorage.clear();
+            sessionStorage.clear();
+            return false;
+        }else{
+            return true;
+        }
+    } 
 
-    const condition = performValidationHere(() => {
-        setInterval(() => {
-            if(localStorage.getItem("security") !== localStorage.getItem("security2"))
-            {
-                document.location.href = "/";
-                localStorage.clear();
-                return true;
-            }
-        }, 3000);
-    
-        setInterval(() =>{
-            if(localStorage.getItem("security") == undefined && localStorage.getItem("security2") == undefined){
-                document.location.href = "/";
-                localStorage.clear();
-                return true;
-            }
-        }, 0)
-    });
-
-    return  condition === true ? (<Route  path={props.path}  exact={props.exact} component={props.component} />) : 
-        (<Redirect  to="/"  />);
+    const condition = performValidationHere();
+    return condition ? (<Route  path={props.path}  exact={props.exact} component={props.component} />) : (<Redirect  to="/"  />);
 };
 export  default  PrivateRoute;

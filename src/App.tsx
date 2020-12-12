@@ -12,6 +12,19 @@ import { Nf404 } from './components/Nf404/Nf404'
 import PrivateRoute from './guard/guard'
 
 export class App extends React.PureComponent {
+  verif = () => {
+    setInterval(() =>{
+      if(localStorage.getItem("security") !== sessionStorage.getItem("security2") || localStorage.getItem("security") === undefined || sessionStorage.getItem("security2") === undefined)
+      {
+          document.location.href = "/";
+          localStorage.clear();
+          sessionStorage.clear();
+          return false;
+      }else{
+          return true;
+      }
+    },5000)
+  }
   render(){
     return (
       <BrowserRouter>
