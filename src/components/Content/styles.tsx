@@ -4,7 +4,7 @@ export type Styles = "labelRoot" | "labelIcon" | "labelText" | "paper" | "search
 
 export default (theme: Theme) => createStyles<Styles,{}>({
     paper: {
-        maxWidth: 936,
+        minWidth: '75%',
         margin: 'auto',
         overflow: 'hidden',
     },

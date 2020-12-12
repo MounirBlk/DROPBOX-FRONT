@@ -9,8 +9,22 @@ import { Register } from './components/Register/Register';
 import './App.css';
 import { Cgu } from './components/Cgu/Cgu'
 import { Nf404 } from './components/Nf404/Nf404'
+import PrivateRoute from './guard/guard'
 
 export class App extends React.PureComponent {
+  verif = () => {
+    setInterval(() =>{
+      if(localStorage.getItem("security") !== sessionStorage.getItem("security2") || localStorage.getItem("security") === undefined || sessionStorage.getItem("security2") === undefined)
+      {
+          document.location.href = "/";
+          localStorage.clear();
+          sessionStorage.clear();
+          return false;
+      }else{
+          return true;
+      }
+    },5000)
+  }
   render(){
     return (
       <BrowserRouter>
@@ -21,7 +35,7 @@ export class App extends React.PureComponent {
             <Route exact={true} path={'/login'} render={()=>(
               <Login.Display />
             )} />
-            <Route exact={true} path={'/dashboard'} render={()=>(
+            <PrivateRoute exact={true} path={'/dashboard'} component={()=>(
               <DashboardProps.Display />
             )} />
             <Route exact={true} path={'/resetPassword'} render={()=>(
@@ -33,10 +47,10 @@ export class App extends React.PureComponent {
             <Route exact={true} path={'/rgpd'} render={()=>(
               <Cgu.Display />
             )} />
-            <Route exact={true} path={'/user'} render={()=>(
+            <PrivateRoute  exact={true} path={'/user'}  component={()=>(
               <Profile.Display />
-            )} />
-             <Route exact={true} path={'*'} render={()=>(
+            )}  />
+            <Route exact={true} path={'*'} render={()=>(
               <Nf404.Display />
             )} />
           </Switch>

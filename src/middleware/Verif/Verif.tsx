@@ -24,4 +24,3 @@ export const password = (password:string) =>
     let regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
     return (password as string).match(regexPassword) == null || password === undefined ? true : false;
 }
-

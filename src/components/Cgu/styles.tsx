@@ -10,7 +10,7 @@ export default (theme: Theme) => createStyles<Styles,{}>({
   },
 submit: {
         margin: theme.spacing(3, 0, 2),
-        backgroundColor: "#0055ff",
+        backgroundColor: "#5555ff",
     },
   bullet: {
     display: 'inline-block',

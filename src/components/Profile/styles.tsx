@@ -1,6 +1,6 @@
 import { createStyles, Theme } from '@material-ui/core';//makeStyles
 
-export type Styles = "bgc" | "pos" |  "div" | "root" | "title" | "btnEditer" | "btnDelete" |"formControl" | "selectEmpty" | "drawer";// add class create
+export type Styles =  "pos" |  "div" | "root" | "title" | "btnEditer" | "btnDelete" |"formControl" | "selectEmpty" | "drawer";// add class create
 
 export default (theme: Theme) => createStyles<Styles,{}>({
     root: {
@@ -46,8 +46,5 @@ export default (theme: Theme) => createStyles<Styles,{}>({
           width: 200,
           flexShrink: 0,
         },
-    },
-    bgc:{
-        backgroundColor: "#009be5"
-    }   
+    }  
 });

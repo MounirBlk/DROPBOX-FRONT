@@ -53,8 +53,7 @@ export class DashboardProps extends React.PureComponent<P & WithStyles<Styles>, 
       
       return(
         <div>
-        <Menu.Display/>
-        <ThemeProvider theme={theme}>
+          <Menu.Display/>
         <div className={classes.root}>
           <CssBaseline />
           <div className={classes.app}>
@@ -67,7 +66,7 @@ export class DashboardProps extends React.PureComponent<P & WithStyles<Styles>, 
             </footer>
           </div>
         </div>
-      </ThemeProvider></div>
+    </div>
       )
     }
 }
