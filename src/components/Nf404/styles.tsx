@@ -12,12 +12,12 @@ export default (theme: Theme) => createStyles<Styles,{}>({
     fontSize: 44,
     alignItems: 'center',
     textAlign:"center",
-    color: "#0055ff",
+    color: "#5555ff",
     paddingTop:  theme.spacing(10),
     marginBottom:  theme.spacing(10)
   },
   submit: {
-          backgroundColor: "#0055ff",
+          backgroundColor: "#4444ff",
           alignItems: 'center',
           textAlign:"center",
           fontSize: 44,
