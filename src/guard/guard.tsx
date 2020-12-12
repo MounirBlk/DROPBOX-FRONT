@@ -8,7 +8,7 @@ const  PrivateRoute: React.FC<{
     }> = (props) => {
     
     const performValidationHere = () => {
-        if(localStorage.getItem("security") !== sessionStorage.getItem("security2") || localStorage.getItem("security") === null || sessionStorage.getItem("security2") === null)
+        if(localStorage.getItem("security") === null)
         {
             localStorage.clear();
             sessionStorage.clear();
