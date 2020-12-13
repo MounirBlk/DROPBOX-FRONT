@@ -83,7 +83,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
       url: 'http://localhost:4000/user/',
       timeout: 1000,
       headers: { 
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYjk4ZjBhNDBiZjAyMTIxNDhmMjFkYSIsImV4cCI6MTYwNzYyNzQwMSwiaWF0IjoxNjA3NTQxMDAxfQ.uitcjX7_oWdsa5XM4j6w7akmiAbQeh1G6i1k77hRueM', 
+        'Authorization': 'Bearer '+localStorage.getItem('security'), 
         'Content-Type': 'application/x-www-form-urlencoded',
       }
     };
@@ -108,9 +108,8 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
     var config : any = {
       method: 'GET',
       url: 'http://localhost:4000/user/',
-      timeout: 1000,
       headers: { 
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYjk4ZjBhNDBiZjAyMTIxNDhmMjFkYSIsImV4cCI6MTYwNzI0NDU1NCwiaWF0IjoxNjA3MTU4MTU0fQ.fPzTkZm8yrhJXNDhRa-Yq8C0FfglI2SzKk701uR5Wz0', 
+        'Authorization': 'Bearer '+localStorage.getItem('security'), 
         'Content-Type': 'application/x-www-form-urlencoded',
       }
     };
@@ -131,7 +130,12 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
       }
     })
     .catch((error : any) => {
-      console.log(error);
+      this.setState({ message: { message: "Token invalide ! ", error: false }, success: true });
+      setTimeout(() => {
+        localStorage.clear();
+        sessionStorage.clear();
+        document.location.href = "/"
+      }, 3500);
     });
   }
 
@@ -170,7 +174,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
         url: 'http://localhost:4000/user/',
         timeout: 1000,
         headers: { 
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYjk4ZjBhNDBiZjAyMTIxNDhmMjFkYSIsImV4cCI6MTYwNzI0NDU1NCwiaWF0IjoxNjA3MTU4MTU0fQ.fPzTkZm8yrhJXNDhRa-Yq8C0FfglI2SzKk701uR5Wz0', 
+          'Authorization': 'Bearer '+localStorage.getItem('security'), 
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         data
@@ -296,7 +300,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
         <nav>
           <Menu.Display />
         </nav>
-        <Container component="main" maxWidth="md">
+        <Container component="main" maxWidth="lg">
           <ThemeProvider theme={theme}>
           <CssBaseline />
               <div className={classes.div}>

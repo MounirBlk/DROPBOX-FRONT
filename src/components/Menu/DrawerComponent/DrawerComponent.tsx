@@ -1,6 +1,6 @@
 import React from 'react';
 import styles, { Styles } from './styles';
-import { WithStyles, withStyles } from '@material-ui/core';
+import { WithStyles, withStyles, Button } from '@material-ui/core';
 import Drawer from "@material-ui/core/Drawer";
 import {
   List,
@@ -26,6 +26,18 @@ export class DrawerComponent extends React.PureComponent<P & WithStyles<Styles>>
 
 public static Display = withStyles(styles as any)(DrawerComponent) as React.ComponentType<P> 
 
+  Dropbox = (event:any) => {
+    document.location.href = '/dashboard';
+  }
+
+  User = (event:any) => {
+    document.location.href = '/user';
+  }
+
+  Api = (event:any) => {
+    document.location.href = '/api';
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -37,19 +49,19 @@ public static Display = withStyles(styles as any)(DrawerComponent) as React.Comp
         onKeyDown={this.props.toggleDrawerHandler}
       >
         <List>
-          <ListItem button>
+          <ListItem button={true} onClick={this.Dropbox} >
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
-            <ListItemText primary="Dropbox" />
+            <ListItemText primary="Dropbox"/>
           </ListItem>
-          <ListItem button>
+          <ListItem button={true}  onClick={this.User}>
             <ListItemIcon>
               <AccountCircleOutlinedIcon />
             </ListItemIcon>
-            <ListItemText primary="Profile" />
+            <ListItemText primary="Profile"/>
           </ListItem>
-          <ListItem button>
+          <ListItem button={true}  onClick={this.Api}>
             <ListItemIcon>
               <HttpIcon />
             </ListItemIcon>

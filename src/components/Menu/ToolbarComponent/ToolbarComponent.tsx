@@ -60,6 +60,11 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
           MobileMoreAnchorEl: event.currentTarget
         });
       };
+
+      deconnexion = (event:any) => {
+        localStorage.clear();
+        document.location.href = '/'
+      }
     
       render() {
         const { classes } = this.props;
@@ -86,7 +91,8 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
               >
                 <PowerSettingsNewIcon />
               </IconButton>
-              <p>Deconnexion</p></MenuItem>
+              <div onClick={this.deconnexion}
+>Deconnexion</div></MenuItem>
           </Menu>
         );
     

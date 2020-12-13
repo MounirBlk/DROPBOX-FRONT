@@ -10,7 +10,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import { NavigatorProps } from '../Navigator/Navigator';
 import { ContentProps } from '../Content/Content';
 import { HeaderProps } from '../Header/Header';
 import styles, { Styles } from './styles';
@@ -36,6 +35,7 @@ export class DashboardProps extends React.PureComponent<P & WithStyles<Styles>, 
     }
 
     public static Display = withStyles(styles as any)(DashboardProps) as React.ComponentType<P>    //Methode de lecture
+
       constructor(props: P & WithStyles<Styles>) {
         super(props);
         this.state = {
