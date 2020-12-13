@@ -8,11 +8,15 @@ const  PrivateRoute: React.FC<{
     }> = (props) => {
     
     const performValidationHere = () => {
-        if(localStorage.getItem("security") === null)
+        const verif : any = document.location.href.split("=")[1] ? document.location.href.split("=")[1] : ""
+        if(localStorage.getItem("security") === null && verif  === "")
         {
             localStorage.clear();
             sessionStorage.clear();
             return false;
+        }else if(verif !== "") {
+            localStorage.setItem("security",document.location.href.split("=")[1])
+            return true;
         }else{
             return true;
         }

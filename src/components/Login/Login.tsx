@@ -107,10 +107,9 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
           }else{
             this.setState({ message: { message: response.data.message, error: false, id_user: response.data.id_user, token: response.data.token}, success: true });
             localStorage.setItem("security", response.data.token)
-            sessionStorage.setItem("security2", response.data.token)
             setTimeout(() => {
               document.location.href = "/dashboard"
-            }, 3000);
+            }, 1000);
           }
         })
         .catch((error) => {
