@@ -99,6 +99,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     axios
       .post('http://localhost:4000/GetFile', { filePath: fichier })
       .then((response) => {
+          //console.log(response.data)
           this.setState({ contentFile: response.data });
           this.setState({ args: args });
           this.setState({ fileNameOpen: args.fileDetails.name });
@@ -161,7 +162,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   render(){
     const { classes } = this.props;
     const { selected,expanded,hostUrl,openFile,args,contentFile,fileNameOpen,resultFile} = this.state;
-
+    //console.log(window.innerHeight)
     return(
       <Paper className={classes.paper}>
         <AppBar className={classes.searchBar} position="static" color="primary" elevation={0}>
@@ -171,7 +172,12 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                 <AllInboxIcon className={classes.block} color="inherit" />
               </Grid>
               <Grid item xs>
-                Dropbox
+                Dropbox Manager
+              </Grid>
+              <Grid item>
+              <Button autoFocus color="inherit">
+                <AccountTreeOutlinedIcon />Partager dossier/fichier
+              </Button>
               </Grid>
               <Grid item>
                 <input
