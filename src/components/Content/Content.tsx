@@ -9,14 +9,21 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TreeItem from '@material-ui/lab/TreeItem'
 import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
+import Close from '@material-ui/icons/Close'
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import styles, { Styles } from './styles';
-import { Tabs,Tab,WithStyles, withStyles,IconButton,Tooltip as TooltipM,Toolbar,AppBar,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, Avatar} from '@material-ui/core';
+import { Tabs,Tab,WithStyles, withStyles,IconButton,Tooltip as TooltipM,Toolbar,AppBar,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, Avatar, Dialog} from '@material-ui/core';
 import {  DetailsView, FileManagerComponent, NavigationPane, Toolbar as ToolbarFile, Inject, BreadCrumbBar, FileLoadEventArgs  } from '@syncfusion/ej2-react-filemanager';
 import axios from 'axios';
 import { getValue, select } from '@syncfusion/ej2-base';
 import { render } from '@testing-library/react';
 import { Tooltip , TooltipEventArgs } from '@syncfusion/ej2-popups';
+import {UnControlled as CodeMirror} from 'react-codemirror2'
+require('codemirror/lib/codemirror.css');
+require('codemirror/theme/material.css');
+require('codemirror/theme/dracula.css');
+require('codemirror/mode/xml/xml.js');
+require('codemirror/mode/javascript/javascript.js');
 
 
 //props
@@ -29,6 +36,11 @@ interface S {
   expanded: Array<string>;
   selected: Array<string>;
   hostUrl:string;
+  openFile : boolean;
+  contentFile: string;
+  resultFile: string;
+  args: any;
+  fileNameOpen: string;
 }
 
 export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>{
@@ -36,7 +48,11 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   constructor(props: P & WithStyles<Styles>) {
     super(props);
     this.state = {
-      //mobileOpen: false,
+      openFile: false,
+      contentFile: '',
+      resultFile: '',
+      args: {},
+      fileNameOpen: '',
       hostUrl : "https://ej2-aspcore-service.azurewebsites.net/",
       //hostUrl : "http://localhost:4000/",
       expanded: [],
@@ -50,19 +66,21 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
         const element = select('[title]', args.element);
         const title = getValue('name', args.fileDetails) +'\n' + getValue('dateModified', args.fileDetails);
         element.setAttribute('title', title);
-        console.log('1 ',element)
-        console.log('2 ',title)
     }
     else if (args.module === 'LargeIconsView') {
         const title = getValue('name', args.fileDetails) +'\n' + getValue('dateModified', args.fileDetails);
         target.setAttribute('title', title);
-        console.log('3 ',title)
     }
-    //console.log(target)
   };
-  fileOpen=(args: any) => {
-    console.log(args)
+
+  fileOpen = (args: any) => {
+    //console.log('fileOpen: ',args)
+    let ext = args.fileDetails.type;
+    if(ext?.toLowerCase() !== '' && ext?.toLowerCase() !== '.png' && ext?.toLowerCase() !== '.jpg' && ext?.toLowerCase() !== '.svg' && ext?.toLowerCase() !== '.zip' && ext?.toLowerCase() !== '.rar'){
+      this.getFileRequest(args.fileDetails.filterPath + args.fileDetails.name , args)
+    }
   };
+
   onCreated = (args: any) => {
     console.log("File Manager has been created successfully: ",args);
   };
@@ -72,11 +90,51 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   onFailure = (args: any) => {
     console.log("Ajax request has failed: ",args);
   };
-  test = () => {
-    console.log('1: ',this.state.expanded)
-    console.log('2: ',this.state.selected)
+
+  handleClickClose = () => {
+    this.setState({ openFile: false });
   }
 
+  getFileRequest = (fichier: string, args: any) => {
+    axios
+      .post('http://localhost:4000/GetFile', { filePath: fichier })
+      .then((response) => {
+          this.setState({ contentFile: response.data });
+          this.setState({ args: args });
+          this.setState({ fileNameOpen: args.fileDetails.name });
+          this.setState({ openFile: true });
+      })
+      .catch((error) => {
+        console.log(error)   
+      });
+  }
+
+  saveFile = () => {
+    let payload = {
+      filePath: this.state.args.fileDetails.filterPath + this.state.args.fileDetails.name,
+      resultFile : this.state.resultFile,
+    }
+    axios
+      .post('http://localhost:4000/SaveFile', payload)
+      .then((response) => {
+          console.log(response.data)
+          this.setState({ openFile: false });
+      })
+      .catch((error) => {
+        console.log(error)   
+      });
+  }
+  _addDirectory = (params: any) => {
+    if (params) {
+      params.mozdirectory = true;
+      params.directory = true;
+      params.webkitdirectory = true;
+    }
+  }
+
+  addFolder = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.files)
+  }
   /*upload = (e: any): void => {
     console.log('Upload...')
     let files = e.target.files;
@@ -102,7 +160,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
 
   render(){
     const { classes } = this.props;
-    const { selected,expanded,hostUrl } = this.state;
+    const { selected,expanded,hostUrl,openFile,args,contentFile,fileNameOpen,resultFile} = this.state;
 
     return(
       <Paper className={classes.paper}>
@@ -116,35 +174,20 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                 Dropbox
               </Grid>
               <Grid item>
-                <Button onClick={this.test} color="inherit" component="span">
-                  Test
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined" color="inherit" component="span">
-                  <AccountTreeOutlinedIcon /> Ajouter un dossier
-                </Button>
-              </Grid>
-              <Grid item>
                 <input
                   accept="*"
                   style={{ display: 'none' }}
                   id="raised-button-file"
                   multiple
-                  /*webkitdirectory
-                  directory*/
+                  ref={node => this._addDirectory(node)}
                   type="file"
+                  onChange={this.addFolder}
                 />
                 <label htmlFor="raised-button-file">
                   <Button variant="outlined" color="inherit" component="span" className={classes.addFile}>
-                    <CloudUploadOutlinedIcon /> Upload
+                    <CloudUploadOutlinedIcon /> Upload dossier
                   </Button>
                 </label>
-                <TooltipM title="Reload">
-                  <IconButton>
-                    <RefreshIcon className={classes.block} color="inherit" />
-                  </IconButton>
-                </TooltipM>
               </Grid>
             </Grid>
           </Toolbar>
@@ -174,6 +217,69 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             </div>
           </Typography>
         </div>
+        <Dialog fullScreen open={openFile} onClose={this.handleClickClose} /*TransitionComponent={Transition}*/>
+        <AppBar className={classes.appBarFile}>
+          <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={this.handleClickClose} aria-label="close">
+              <Close />
+            </IconButton>
+            <Typography variant="h6" className={classes.titleFile}>
+              { fileNameOpen }
+            </Typography>
+            <Button autoFocus color="inherit" onClick={this.saveFile}>
+              Sauvegarder
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <CodeMirror
+          value={contentFile}
+          options={{
+            mode: 'scheme',
+            theme: 'dracula',
+            autoCloseTags: true,
+            autoCloseBrackets: true,
+            lint: false,
+            lineNumbers: true,
+            gutters: ["CodeMirror-lint-markers", "CodeMirror-linenumbers", "breakpoints"],
+            viewportMargin: Infinity,
+          }}
+          onGutterClick={(editor, lineNumber, gutter, event) => {
+            //point d'arret
+            editor.on("gutterClick", function(cm: any, n:any) {
+                let info = cm.lineInfo(n);
+                cm.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : makeMarker());
+            });
+
+            //point d'arret
+            function makeMarker() {
+                var marker = document.createElement("div");
+                marker.style.color = "#822";
+                marker.innerHTML = "●";
+                //marker.style.padding = "0px 0px"
+                return marker;
+            }
+          }}
+
+          onChange={(editor, data, value) => {
+            console.log(editor.options.mode)
+            let pending: any;
+            clearTimeout(pending);
+            pending = setTimeout(update, 300);
+            
+            //auto detection lang
+            function looksLikeScheme(code: any) {
+              return !/^\s*\(\s*function\b/.test(code) && /^\s*[;\(]/.test(code);
+            }
+            //auto detection lang
+            function update() {
+                editor.setOption("mode", looksLikeScheme(editor.getValue()) ? "scheme" : "javascript");
+            }
+            update()
+            this.setState({ resultFile: value });
+            console.log(editor.options.mode)
+          }}
+        />   
+        </Dialog>
       </Paper>
     );
   }

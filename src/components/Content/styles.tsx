@@ -1,6 +1,6 @@
 import { createStyles, Theme } from '@material-ui/core';//makeStyles
 
-export type Styles = "labelRoot" | "labelIcon" | "labelText" | "paper" | "searchBar" | "block" | "addFile" | "contentWrapper" | "roottreeview" | "secondaryBar";// add class create
+export type Styles = "labelRoot" | "labelIcon" | "labelText" | "paper" | "searchBar" | "block" | "addFile" | "contentWrapper" | "roottreeview" | "secondaryBar" | "appBarFile" | "titleFile";// add class create
 
 export default (theme: Theme) => createStyles<Styles,{}>({
     paper: {
@@ -39,5 +39,12 @@ export default (theme: Theme) => createStyles<Styles,{}>({
       labelText: {
         fontWeight: 'inherit',
         flexGrow: 1,
+      },
+      appBarFile: {
+        position: 'relative',
+      },
+      titleFile: {
+        marginLeft: theme.spacing(2),
+        flex: 1,
       },
 });
