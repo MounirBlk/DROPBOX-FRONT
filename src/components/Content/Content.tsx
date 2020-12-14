@@ -15,15 +15,25 @@ import styles, { Styles } from './styles';
 import { Tabs,Tab,WithStyles, withStyles,IconButton,Tooltip as TooltipM,Toolbar,AppBar,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, Avatar, Dialog} from '@material-ui/core';
 import {  DetailsView, FileManagerComponent, NavigationPane, Toolbar as ToolbarFile, Inject, BreadCrumbBar, FileLoadEventArgs  } from '@syncfusion/ej2-react-filemanager';
 import axios from 'axios';
-import { getValue, select } from '@syncfusion/ej2-base';
+import { getValue, select, L10n, setCulture } from '@syncfusion/ej2-base';
 import { render } from '@testing-library/react';
 import { Tooltip , TooltipEventArgs } from '@syncfusion/ej2-popups';
-import {UnControlled as CodeMirror} from 'react-codemirror2'
+import {UnControlled as CodeMirror} from 'react-codemirror2';
+import * as EJ2_LOCALE from "./fr.json";
+import { AnyARecord } from 'dns';
+L10n.load({ fr: EJ2_LOCALE.fr });
+setCulture("fr");
 require('codemirror/lib/codemirror.css');
 require('codemirror/theme/material.css');
 require('codemirror/theme/dracula.css');
 require('codemirror/mode/xml/xml.js');
+require('codemirror/mode/sql/sql.js');
+require('codemirror/mode/css/css.js');
+require('codemirror/mode/jsx/jsx.js');
+require('codemirror/mode/php/php.js');
+require('codemirror/mode/htmlmixed/htmlmixed.js');
 require('codemirror/mode/javascript/javascript.js');
+const detect = require('language-detect');
 
 
 //props
@@ -99,7 +109,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     axios
       .post('http://localhost:4000/GetFile', { filePath: fichier })
       .then((response) => {
-          //console.log(response.data)
+          console.log()
           this.setState({ contentFile: response.data });
           this.setState({ args: args });
           this.setState({ fileNameOpen: args.fileDetails.name });
@@ -133,9 +143,17 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     }
   }
 
-  addFolder = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files)
+  addFolder = (event: any) => {
+    if(event.target.files.length > 0){
+      for(let i = 0; i < event.target.files.length; i++){
+        console.log(event.target.files[i].webkitRelativePath.split('/').slice(0,-1))
+        console.log(event.target.files[i].name)
+      }
+    }else{
+      return console.log('Aucun dossier a été ajouté')
+    }
   }
+
   /*upload = (e: any): void => {
     console.log('Upload...')
     let files = e.target.files;
@@ -176,7 +194,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
               </Grid>
               <Grid item>
               <Button autoFocus color="inherit">
-                <AccountTreeOutlinedIcon />Partager dossier/fichier
+                <AccountTreeOutlinedIcon />Partager
               </Button>
               </Grid>
               <Grid item>
@@ -211,7 +229,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                 /*path='/download' */
                 /*showFileExtension= {false}*/
                 /*enablePersistence={true}*/
-                uploadSettings={{ maxFileSize: 233332 /*30000000*/, minFileSize: 120, autoUpload: true }}
+                /*uploadSettings={{ maxFileSize: 233332, minFileSize: 120, autoUpload: true }}*/ //maxsize: 30000000
                 fileOpen = {this.fileOpen.bind(this)}
                 fileLoad = {this.fileLoad.bind(this)}
                 created = {this.onCreated.bind(this)}
@@ -267,22 +285,8 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
           }}
 
           onChange={(editor, data, value) => {
-            console.log(editor.options.mode)
-            let pending: any;
-            clearTimeout(pending);
-            pending = setTimeout(update, 300);
-            
-            //auto detection lang
-            function looksLikeScheme(code: any) {
-              return !/^\s*\(\s*function\b/.test(code) && /^\s*[;\(]/.test(code);
-            }
-            //auto detection lang
-            function update() {
-                editor.setOption("mode", looksLikeScheme(editor.getValue()) ? "scheme" : "javascript");
-            }
-            update()
-            this.setState({ resultFile: value });
-            console.log(editor.options.mode)
+            //console.log('detect: ',detect.contents(fileNameOpen, value).toLowerCase())
+            editor.setOption('mode', detect.contents(fileNameOpen, value).toLowerCase() === 'html'? 'htmlmixed' : detect.contents(fileNameOpen, value).toLowerCase() === 'json' ? 'jsx' : detect.contents(fileNameOpen, value).toLowerCase())
           }}
         />   
         </Dialog>
