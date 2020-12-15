@@ -45,7 +45,7 @@ interface S {
   //mobileOpen:boolean;
   expanded: Array<string>;
   selected: Array<string>;
-  hostUrl:string;
+  //hostUrl:string;
   openFile : boolean;
   contentFile: string;
   resultFile: string;
@@ -63,8 +63,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       resultFile: '',
       args: {},
       fileNameOpen: '',
-      hostUrl : "https://ej2-aspcore-service.azurewebsites.net/",
-      //hostUrl : "http://localhost:4000/",
+      //hostUrl : "https://ej2-aspcore-service.azurewebsites.net/",
       expanded: [],
       selected: [],
     };
@@ -84,7 +83,6 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   };
 
   fileOpen = (args: any) => {
-    //console.log('fileOpen: ',args)
     let ext = args.fileDetails.type;
     if(ext?.toLowerCase() !== '' && ext?.toLowerCase() !== '.png' && ext?.toLowerCase() !== '.jpg' && ext?.toLowerCase() !== '.svg' && ext?.toLowerCase() !== '.zip' && ext?.toLowerCase() !== '.rar'){
       this.getFileRequest(args.fileDetails.filterPath + args.fileDetails.name , args)
@@ -106,10 +104,10 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   }
 
   getFileRequest = (fichier: string, args: any) => {
+    console.log(fichier)
     axios
       .post('http://localhost:4000/GetFile', { filePath: fichier })
       .then((response) => {
-          console.log()
           this.setState({ contentFile: response.data });
           this.setState({ args: args });
           this.setState({ fileNameOpen: args.fileDetails.name });
@@ -179,7 +177,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
 
   render(){
     const { classes } = this.props;
-    const { selected,expanded,hostUrl,openFile,args,contentFile,fileNameOpen,resultFile} = this.state;
+    const { selected,expanded,openFile,args,contentFile,fileNameOpen,resultFile} = this.state;
     //console.log(window.innerHeight)
     return(
       <Paper className={classes.paper}>
@@ -279,13 +277,10 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                 var marker = document.createElement("div");
                 marker.style.color = "#822";
                 marker.innerHTML = "●";
-                //marker.style.padding = "0px 0px"
                 return marker;
             }
           }}
-
-          onChange={(editor, data, value) => {
-            //console.log('detect: ',detect.contents(fileNameOpen, value).toLowerCase())
+          editorDidMount={(editor,value) => {
             editor.setOption('mode', detect.contents(fileNameOpen, value).toLowerCase() === 'html'? 'htmlmixed' : detect.contents(fileNameOpen, value).toLowerCase() === 'json' ? 'jsx' : detect.contents(fileNameOpen, value).toLowerCase())
           }}
         />   
