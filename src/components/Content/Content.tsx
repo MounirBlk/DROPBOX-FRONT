@@ -15,15 +15,25 @@ import styles, { Styles } from './styles';
 import { Tabs,Tab,WithStyles, withStyles,IconButton,Tooltip as TooltipM,Toolbar,AppBar,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, Avatar, Dialog} from '@material-ui/core';
 import {  DetailsView, FileManagerComponent, NavigationPane, Toolbar as ToolbarFile, Inject, BreadCrumbBar, FileLoadEventArgs  } from '@syncfusion/ej2-react-filemanager';
 import axios from 'axios';
-import { getValue, select } from '@syncfusion/ej2-base';
+import { getValue, select, L10n, setCulture } from '@syncfusion/ej2-base';
 import { render } from '@testing-library/react';
 import { Tooltip , TooltipEventArgs } from '@syncfusion/ej2-popups';
-import {UnControlled as CodeMirror} from 'react-codemirror2'
+import {UnControlled as CodeMirror} from 'react-codemirror2';
+import * as EJ2_LOCALE from "./fr.json";
+import { AnyARecord } from 'dns';
+L10n.load({ fr: EJ2_LOCALE.fr });
+setCulture("fr");
 require('codemirror/lib/codemirror.css');
 require('codemirror/theme/material.css');
 require('codemirror/theme/dracula.css');
 require('codemirror/mode/xml/xml.js');
+require('codemirror/mode/sql/sql.js');
+require('codemirror/mode/css/css.js');
+require('codemirror/mode/jsx/jsx.js');
+require('codemirror/mode/php/php.js');
+require('codemirror/mode/htmlmixed/htmlmixed.js');
 require('codemirror/mode/javascript/javascript.js');
+const detect = require('language-detect');
 
 
 //props
@@ -35,7 +45,7 @@ interface S {
   //mobileOpen:boolean;
   expanded: Array<string>;
   selected: Array<string>;
-  hostUrl:string;
+  //hostUrl:string;
   openFile : boolean;
   contentFile: string;
   resultFile: string;
@@ -53,8 +63,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       resultFile: '',
       args: {},
       fileNameOpen: '',
-      hostUrl : "https://ej2-aspcore-service.azurewebsites.net/",
-      //hostUrl : "http://localhost:4000/",
+      //hostUrl : "https://ej2-aspcore-service.azurewebsites.net/",
       expanded: [],
       selected: [],
     };
@@ -74,7 +83,6 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   };
 
   fileOpen = (args: any) => {
-    //console.log('fileOpen: ',args)
     let ext = args.fileDetails.type;
     if(ext?.toLowerCase() !== '' && ext?.toLowerCase() !== '.png' && ext?.toLowerCase() !== '.jpg' && ext?.toLowerCase() !== '.svg' && ext?.toLowerCase() !== '.zip' && ext?.toLowerCase() !== '.rar'){
       this.getFileRequest(args.fileDetails.filterPath + args.fileDetails.name , args)
@@ -96,6 +104,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   }
 
   getFileRequest = (fichier: string, args: any) => {
+    console.log(fichier)
     axios
       .post('http://localhost:4000/GetFile', { filePath: fichier })
       .then((response) => {
@@ -132,9 +141,17 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     }
   }
 
-  addFolder = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files)
+  addFolder = (event: any) => {
+    if(event.target.files.length > 0){
+      for(let i = 0; i < event.target.files.length; i++){
+        console.log(event.target.files[i].webkitRelativePath.split('/').slice(0,-1))
+        console.log(event.target.files[i].name)
+      }
+    }else{
+      return console.log('Aucun dossier a été ajouté')
+    }
   }
+
   /*upload = (e: any): void => {
     console.log('Upload...')
     let files = e.target.files;
@@ -160,8 +177,8 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
 
   render(){
     const { classes } = this.props;
-    const { selected,expanded,hostUrl,openFile,args,contentFile,fileNameOpen,resultFile} = this.state;
-
+    const { selected,expanded,openFile,args,contentFile,fileNameOpen,resultFile} = this.state;
+    //console.log(window.innerHeight)
     return(
       <Paper className={classes.paper}>
         <AppBar className={classes.searchBar} position="static" color="primary" elevation={0}>
@@ -171,7 +188,12 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                 <AllInboxIcon className={classes.block} color="inherit" />
               </Grid>
               <Grid item xs>
-                Dropbox
+                Dropbox Manager
+              </Grid>
+              <Grid item>
+              <Button autoFocus color="inherit">
+                <AccountTreeOutlinedIcon />Partager
+              </Button>
               </Grid>
               <Grid item>
                 <input
@@ -205,7 +227,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                 /*path='/download' */
                 /*showFileExtension= {false}*/
                 /*enablePersistence={true}*/
-                uploadSettings={{ maxFileSize: 233332 /*30000000*/, minFileSize: 120, autoUpload: true }}
+                /*uploadSettings={{ maxFileSize: 233332, minFileSize: 120, autoUpload: true }}*/ //maxsize: 30000000
                 fileOpen = {this.fileOpen.bind(this)}
                 fileLoad = {this.fileLoad.bind(this)}
                 created = {this.onCreated.bind(this)}
@@ -255,28 +277,11 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                 var marker = document.createElement("div");
                 marker.style.color = "#822";
                 marker.innerHTML = "●";
-                //marker.style.padding = "0px 0px"
                 return marker;
             }
           }}
-
-          onChange={(editor, data, value) => {
-            console.log(editor.options.mode)
-            let pending: any;
-            clearTimeout(pending);
-            pending = setTimeout(update, 300);
-            
-            //auto detection lang
-            function looksLikeScheme(code: any) {
-              return !/^\s*\(\s*function\b/.test(code) && /^\s*[;\(]/.test(code);
-            }
-            //auto detection lang
-            function update() {
-                editor.setOption("mode", looksLikeScheme(editor.getValue()) ? "scheme" : "javascript");
-            }
-            update()
-            this.setState({ resultFile: value });
-            console.log(editor.options.mode)
+          editorDidMount={(editor,value) => {
+            editor.setOption('mode', detect.contents(fileNameOpen, value).toLowerCase() === 'html'? 'htmlmixed' : detect.contents(fileNameOpen, value).toLowerCase() === 'json' ? 'jsx' : detect.contents(fileNameOpen, value).toLowerCase())
           }}
         />   
         </Dialog>
