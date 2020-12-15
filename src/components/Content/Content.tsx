@@ -1,26 +1,15 @@
 import React from 'react';
-import { createStyles, Theme } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import Store from "@material-ui/icons/Store";
-import TreeView from '@material-ui/lab/TreeView';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import TreeItem from '@material-ui/lab/TreeItem'
 import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
 import Close from '@material-ui/icons/Close'
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import styles, { Styles } from './styles';
-import { Tabs,Tab,WithStyles, withStyles,IconButton,Tooltip as TooltipM,Toolbar,AppBar,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, Avatar, Dialog} from '@material-ui/core';
+import {WithStyles, withStyles,IconButton,Tooltip as TooltipM,Toolbar,AppBar,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, Avatar, Dialog} from '@material-ui/core';
 import {  DetailsView, FileManagerComponent, NavigationPane, Toolbar as ToolbarFile, Inject, BreadCrumbBar, FileLoadEventArgs  } from '@syncfusion/ej2-react-filemanager';
 import axios from 'axios';
 import { getValue, select, L10n, setCulture } from '@syncfusion/ej2-base';
-import { render } from '@testing-library/react';
-import { Tooltip , TooltipEventArgs } from '@syncfusion/ej2-popups';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import * as EJ2_LOCALE from "./fr.json";
-import { AnyARecord } from 'dns';
 L10n.load({ fr: EJ2_LOCALE.fr });
 setCulture("fr");
 require('codemirror/lib/codemirror.css');
@@ -46,11 +35,14 @@ interface S {
   expanded: Array<string>;
   selected: Array<string>;
   //hostUrl:string;
-  openFile : boolean;
+  openFileDialog : boolean;
   contentFile: string;
   resultFile: string;
   args: any;
   fileNameOpen: string;
+  isEdit: boolean;
+  fileBase: any;
+  mimeType: string;
 }
 
 export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>{
@@ -58,7 +50,9 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   constructor(props: P & WithStyles<Styles>) {
     super(props);
     this.state = {
-      openFile: false,
+      fileBase:null,
+      mimeType: '',
+      openFileDialog: false,
       contentFile: '',
       resultFile: '',
       args: {},
@@ -66,6 +60,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       //hostUrl : "https://ej2-aspcore-service.azurewebsites.net/",
       expanded: [],
       selected: [],
+      isEdit: false
     };
   }
 
@@ -85,33 +80,53 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   fileOpen = (args: any) => {
     let ext = args.fileDetails.type;
     if(ext?.toLowerCase() !== '' && ext?.toLowerCase() !== '.png' && ext?.toLowerCase() !== '.jpg' && ext?.toLowerCase() !== '.svg' && ext?.toLowerCase() !== '.zip' && ext?.toLowerCase() !== '.rar'){
-      this.getFileRequest(args.fileDetails.filterPath + args.fileDetails.name , args)
+      if(ext?.toLowerCase() === '.html' || ext?.toLowerCase() === '.css' || ext?.toLowerCase() === '.js' || 
+      ext?.toLowerCase() === '.php' || ext?.toLowerCase() === '.sql' || ext?.toLowerCase() === '.ts' || 
+      ext?.toLowerCase() === '.json' || ext?.toLowerCase() === '.xml' || ext?.toLowerCase() === '.vue'){
+        this.getFileRequest(args.fileDetails.filterPath + args.fileDetails.name , args, true)
+      }else if(ext?.toLowerCase() === '.pdf' || ext?.toLowerCase() === '.ppt' || ext?.toLowerCase() === '.pptx' || ext?.toLowerCase() === '.pptx' || ext?.toLowerCase() === '.csv'
+      || ext?.toLowerCase() === '.doc' || ext?.toLowerCase() === '.docx' || ext?.toLowerCase() === '.xls' || ext?.toLowerCase() === '.xlsx'){
+        console.log(ext?.toLowerCase())
+        this.getFileRequest(args.fileDetails.filterPath + args.fileDetails.name , args, false)
+      }else{
+        console.log("L'affichage ne fonctionne pas")
+      }
     }
   };
 
   onCreated = (args: any) => {
-    console.log("File Manager has been created successfully: ",args);
+    console.log("Bienvenue sur le Dropbox manager !");
   };
   onSuccess = (args: any) => {
-    console.log("Ajax request successful: ",args);
+    console.log("L'action a bien fonctionné !",args);
   };
   onFailure = (args: any) => {
-    console.log("Ajax request has failed: ",args);
+    console.log("Veuillez rafraîchir la page !",args);
   };
 
   handleClickClose = () => {
-    this.setState({ openFile: false });
+    this.setState({ openFileDialog: false });
   }
 
-  getFileRequest = (fichier: string, args: any) => {
+  getFileRequest = (fichier: string, args: any, isEdit: boolean) => {
     console.log(fichier)
     axios
-      .post('http://localhost:4000/GetFile', { filePath: fichier })
+      .post('http://localhost:4000/GetFile', { filePath: fichier, isEdit: isEdit })
       .then((response) => {
-          this.setState({ contentFile: response.data });
-          this.setState({ args: args });
+          if(isEdit){
+            this.setState({ contentFile: response.data });
+            this.setState({ args: args });
+          }else if(!isEdit){
+            console.log(response.data)
+            this.setState({ fileBase: response.data.filebase });    
+            this.setState({ mimeType: response.data.mimeType });                
+          }else{
+            console.log('Error');
+          }
           this.setState({ fileNameOpen: args.fileDetails.name });
-          this.setState({ openFile: true });
+          this.setState({ isEdit: isEdit });          
+          this.setState({ openFileDialog: true });
+
       })
       .catch((error) => {
         console.log(error)   
@@ -127,7 +142,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       .post('http://localhost:4000/SaveFile', payload)
       .then((response) => {
           console.log(response.data)
-          this.setState({ openFile: false });
+          this.setState({ openFileDialog: false });
       })
       .catch((error) => {
         console.log(error)   
@@ -177,7 +192,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
 
   render(){
     const { classes } = this.props;
-    const { selected,expanded,openFile,args,contentFile,fileNameOpen,resultFile} = this.state;
+    const { selected,expanded,openFileDialog,args,contentFile,fileNameOpen,resultFile,isEdit,fileBase,mimeType} = this.state;
     //console.log(window.innerHeight)
     return(
       <Paper className={classes.paper}>
@@ -219,10 +234,10 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             <div className="control-section">
               <div className="filemanager-container">
                 <FileManagerComponent id="file" view="LargeIcons" ajaxSettings={{
-                  getImageUrl:  "http://localhost:4000/GetImage",//hostUrl + "api/FileManager/GetImage"
-                  url: "http://localhost:4000/Manager",// 'http://localhost:4000/manager' ou hostUrl +"api/FileManager/FileOperations"
-                  downloadUrl:"http://localhost:4000/Download",//hostUrl + 'api/FileManager/Download'
-                  uploadUrl:  "http://localhost:4000/Upload" ,// 'http://localhost:4000/upload'  ou hostUrl + 'api/FileManager/Upload'
+                  getImageUrl:  "http://localhost:4000/GetImage",// hostUrl + "api/FileManager/GetImage"
+                  url: "http://localhost:4000/Manager",// hostUrl +"api/FileManager/FileOperations"
+                  downloadUrl:"http://localhost:4000/Download",// hostUrl + 'api/FileManager/Download'
+                  uploadUrl:  "http://localhost:4000/Upload" ,// hostUrl + 'api/FileManager/Upload'
                 }} 
                 /*path='/download' */
                 /*showFileExtension= {false}*/
@@ -239,7 +254,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             </div>
           </Typography>
         </div>
-        <Dialog fullScreen open={openFile} onClose={this.handleClickClose} /*TransitionComponent={Transition}*/>
+        <Dialog fullScreen open={openFileDialog} onClose={this.handleClickClose}>
         <AppBar className={classes.appBarFile}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={this.handleClickClose} aria-label="close">
@@ -248,42 +263,53 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             <Typography variant="h6" className={classes.titleFile}>
               { fileNameOpen }
             </Typography>
+            {isEdit ? (            
             <Button autoFocus color="inherit" onClick={this.saveFile}>
               Sauvegarder
+            </Button>) : (
+            <Button autoFocus color="inherit" onClick={this.handleClickClose}>
+              Fermer
             </Button>
+            )}
           </Toolbar>
         </AppBar>
-        <CodeMirror
-          value={contentFile}
-          options={{
-            mode: 'scheme',
-            theme: 'dracula',
-            autoCloseTags: true,
-            autoCloseBrackets: true,
-            lint: false,
-            lineNumbers: true,
-            gutters: ["CodeMirror-lint-markers", "CodeMirror-linenumbers", "breakpoints"],
-            viewportMargin: Infinity,
-          }}
-          onGutterClick={(editor, lineNumber, gutter, event) => {
-            //point d'arret
-            editor.on("gutterClick", function(cm: any, n:any) {
-                let info = cm.lineInfo(n);
-                cm.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : makeMarker());
-            });
+        {isEdit ? (
+          <CodeMirror
+            value={contentFile}
+            options={{
+              mode: 'scheme',
+              theme: 'dracula',
+              autoCloseTags: true,
+              autoCloseBrackets: true,
+              lint: false,
+              lineNumbers: true,
+              gutters: ["CodeMirror-lint-markers", "CodeMirror-linenumbers", "breakpoints"],
+              viewportMargin: Infinity,
+            }}
+            onGutterClick={(editor, lineNumber, gutter, event) => {
+              //point d'arret
+              editor.on("gutterClick", (cm: any, n:any) => {
+                  let info = cm.lineInfo(n);
+                  cm.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : makeMarker());
+              });
 
-            //point d'arret
-            function makeMarker() {
-                var marker = document.createElement("div");
-                marker.style.color = "#822";
-                marker.innerHTML = "●";
-                return marker;
-            }
-          }}
-          editorDidMount={(editor,value) => {
-            editor.setOption('mode', detect.contents(fileNameOpen, value).toLowerCase() === 'html'? 'htmlmixed' : detect.contents(fileNameOpen, value).toLowerCase() === 'json' ? 'jsx' : detect.contents(fileNameOpen, value).toLowerCase())
-          }}
-        />   
+              //point d'arret
+              function makeMarker() {
+                  var marker = document.createElement("div");
+                  marker.style.color = "#822";
+                  marker.innerHTML = "●";
+                  return marker;
+              }
+            }}
+            editorDidMount={(editor,value) => {
+              editor.setOption('mode', detect.contents(fileNameOpen, value).toLowerCase() === 'html' || detect.contents(fileNameOpen, value).toLowerCase() === 'vue' ? 'htmlmixed' : detect.contents(fileNameOpen, value).toLowerCase() === 'json' ? 'jsx' : detect.contents(fileNameOpen, value).toLowerCase() === 'sqlpl' ? 'sql' : fileNameOpen.split('.')[1] === 'ts' ? 'javascript' : detect.contents(fileNameOpen, value).toLowerCase());
+            }}
+          />   
+        ) : (
+          <iframe src={"data:"+mimeType+";base64,"+fileBase} height="100%" width="100%"></iframe> // mimeType = application/pdf
+          //<iframe src='https://view.officeapps.live.com/op/embed.aspx?src=http://roussetelec.free.fr/Files/robot_moway.doc' width='100%' height='600px'></iframe>
+        )}
+
         </Dialog>
       </Paper>
     );
