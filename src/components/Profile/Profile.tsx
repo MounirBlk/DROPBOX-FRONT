@@ -183,7 +183,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
       axios(config)
       .then((response : any) => {
         if(response.data.error != false) {
-          return this.setState({ message: { message: response.data.message, error: true }, error: true })
+          this.setState({ message: { message: response.data.message, error: true }, error: true })
         }else{
           this.setState({ message: { message: "modification prise en compte", error: false }, success: true });
           setTimeout(() => {
