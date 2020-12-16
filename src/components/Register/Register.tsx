@@ -355,7 +355,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Repeat Password"
                   type="password"
                   id="password"
                   value={this.state.password2}

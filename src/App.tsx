@@ -10,6 +10,9 @@ import './App.css';
 import { Cgu } from './components/Cgu/Cgu'
 import { Nf404 } from './components/Nf404/Nf404'
 import PrivateRoute from './guard/guard'
+import {Prenium} from './components/Prenium/Prenium'
+import {Merci} from './components/Merci/Merci'
+import {Api} from './components/API/Api'
 
 export class App extends React.PureComponent {
   verif = () => {
@@ -49,6 +52,15 @@ export class App extends React.PureComponent {
             )} />
             <PrivateRoute  exact={true} path={'/user'}  component={()=>(
               <Profile.Display />
+            )}  />
+            <PrivateRoute  exact={true} path={'/prenium'}  component={()=>(
+              <Prenium.Display />
+            )}  />
+             <PrivateRoute  exact={true} path={'/merci'}  component={()=>(
+              <Merci.Display />
+            )}  />
+              <PrivateRoute  exact={true} path={'/api'}  component={()=>(
+              <Api.Display />
             )}  />
             <Route exact={true} path={'*'} render={()=>(
               <Nf404.Display />

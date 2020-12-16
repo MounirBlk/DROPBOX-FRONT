@@ -23,6 +23,7 @@ const  PrivateRoute: React.FC<{
     } 
 
     const condition = performValidationHere();
-    return condition ? (<Route  path={props.path}  exact={props.exact} component={props.component} />) : (<Redirect  to="/"  />);
+
+    return condition ? (<Route  path={props.path}  exact={props.exact} component={props.component} />) : (<Redirect  to="/login"  />);
 };
 export  default  PrivateRoute;

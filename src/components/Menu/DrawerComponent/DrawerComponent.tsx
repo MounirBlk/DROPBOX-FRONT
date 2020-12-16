@@ -9,6 +9,8 @@ import {
   ListItemText,
   Divider
 } from "@material-ui/core";
+import StarIcon from '@material-ui/icons/Star';
+
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import DraftsIcon from "@material-ui/icons/Drafts";
@@ -36,6 +38,10 @@ public static Display = withStyles(styles as any)(DrawerComponent) as React.Comp
 
   Api = (event:any) => {
     document.location.href = '/api';
+  }
+
+  Prenium = (event:any) => {
+    document.location.href = '/prenium';
   }
 
   render() {
@@ -66,6 +72,12 @@ public static Display = withStyles(styles as any)(DrawerComponent) as React.Comp
               <HttpIcon />
             </ListItemIcon>
             <ListItemText primary="Documentation Api" />
+          </ListItem>   
+          <ListItem button={true}  onClick={this.Prenium}>
+            <ListItemIcon>
+              <StarIcon />
+            </ListItemIcon>
+            <ListItemText primary="Prenium" />
           </ListItem>   
         </List>
         <Divider />
