@@ -85,8 +85,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       ext?.toLowerCase() === '.json' || ext?.toLowerCase() === '.xml' || ext?.toLowerCase() === '.vue'){
         this.getFileRequest(args.fileDetails.filterPath + args.fileDetails.name , args, true)
       }else if(ext?.toLowerCase() === '.pdf' || ext?.toLowerCase() === '.ppt' || ext?.toLowerCase() === '.pptx' || ext?.toLowerCase() === '.pptx' || ext?.toLowerCase() === '.csv'
-      || ext?.toLowerCase() === '.doc' || ext?.toLowerCase() === '.docx' || ext?.toLowerCase() === '.xls' || ext?.toLowerCase() === '.xlsx'){
-        console.log(ext?.toLowerCase())
+      || ext?.toLowerCase() === '.doc' || ext?.toLowerCase() === '.docx' || ext?.toLowerCase() === '.xls' || ext?.toLowerCase() === '.xlsx' || ext?.toLowerCase() === '.xlsm'){
         this.getFileRequest(args.fileDetails.filterPath + args.fileDetails.name , args, false)
       }else{
         console.log("L'affichage ne fonctionne pas")
@@ -109,15 +108,13 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   }
 
   getFileRequest = (fichier: string, args: any, isEdit: boolean) => {
-    console.log(fichier)
     axios
-      .post('http://localhost:4000/GetFile', { filePath: fichier, isEdit: isEdit })
+      .post('http://localhost:4000/GetFile', { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name })
       .then((response) => {
           if(isEdit){
             this.setState({ contentFile: response.data });
             this.setState({ args: args });
           }else if(!isEdit){
-            console.log(response.data)
             this.setState({ fileBase: response.data.filebase });    
             this.setState({ mimeType: response.data.mimeType });                
           }else{
@@ -125,12 +122,11 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
           }
           this.setState({ fileNameOpen: args.fileDetails.name });
           this.setState({ isEdit: isEdit });          
-          this.setState({ openFileDialog: true });
-
       })
       .catch((error) => {
         console.log(error)   
-      });
+      })
+      .finally(() => this.setState({ openFileDialog: true }));
   }
 
   saveFile = () => {
@@ -307,7 +303,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
           />   
         ) : (
           <iframe src={"data:"+mimeType+";base64,"+fileBase} height="100%" width="100%"></iframe> // mimeType = application/pdf
-          //<iframe src='https://view.officeapps.live.com/op/embed.aspx?src=http://roussetelec.free.fr/Files/robot_moway.doc' width='100%' height='600px'></iframe>
+          //<iframe src='https://view.officeapps.live.com/op/view.aspx?src=http://localhost:4000/GetFileContent/content*b.pdf' width='100%' height='600px'></iframe>
         )}
 
         </Dialog>
