@@ -21,6 +21,6 @@ export const password = (password:string) =>
 {
     if(password == null || password == undefined)
         return false
-    let regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+    let regexPassword = /^(?=.*[a-z])(?=.*[0-9])(?=.{6,})/;
     return (password as string).match(regexPassword) == null || password === undefined ? true : false;
 }
