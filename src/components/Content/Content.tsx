@@ -86,7 +86,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   fileOpen = (args: any) => {
     let ext = args.fileDetails.type;
     if(ext?.toLowerCase() !== '' && ext?.toLowerCase() !== '.png' && ext?.toLowerCase() !== '.jpg' && ext?.toLowerCase() !== '.svg' && ext?.toLowerCase() !== '.zip' && ext?.toLowerCase() !== '.rar'){
-      if(ext?.toLowerCase() === '.html' || ext?.toLowerCase() === '.css' || ext?.toLowerCase() === '.js' || 
+      if(ext?.toLowerCase() === '.html' || ext?.toLowerCase() === '.css' || ext?.toLowerCase() === '.js' || ext?.toLowerCase() === '.txt' ||
       ext?.toLowerCase() === '.php' || ext?.toLowerCase() === '.sql' || ext?.toLowerCase() === '.ts' || 
       ext?.toLowerCase() === '.json' || ext?.toLowerCase() === '.xml' || ext?.toLowerCase() === '.vue'){
         this.getFileRequest(args.fileDetails.filterPath + args.fileDetails.name , args, true)
@@ -114,8 +114,13 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   }
 
   getFileRequest = (fichier: string, args: any, isEdit: boolean) => {
+    const config = {
+      headers: {
+        'Authorization': 'Bearer '+localStorage.getItem('security')
+      },
+    };
     axios
-      .post('http://localhost:4000/GetFile/' + localStorage.getItem('security') , { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name })
+      .post('http://localhost:4000/GetFile', { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name }, config)
       .then((response) => {
           if(isEdit){
             this.setState({ contentFile: response.data });
@@ -140,8 +145,15 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       filePath: this.state.args.fileDetails.filterPath + this.state.args.fileDetails.name,
       resultFile : this.state.resultFile,
     }
+
+    const config = {
+      headers: {
+        'Authorization': 'Bearer '+localStorage.getItem('security')
+      },
+    };
+
     axios
-      .post('http://localhost:4000/SaveFile/' + localStorage.getItem('security'), payload)
+      .post('http://localhost:4000/SaveFile', payload, config)
       .then((response) => {
           console.log(response.data)
           this.setState({ openFileDialog: false });
@@ -306,6 +318,9 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             }}
             editorDidMount={(editor,value) => {
               editor.setOption('mode', detect.contents(fileNameOpen, value).toLowerCase() === 'html' || detect.contents(fileNameOpen, value).toLowerCase() === 'vue' ? 'htmlmixed' : detect.contents(fileNameOpen, value).toLowerCase() === 'json' ? 'jsx' : detect.contents(fileNameOpen, value).toLowerCase() === 'sqlpl' ? 'sql' : fileNameOpen.split('.')[1] === 'ts' ? 'javascript' : detect.contents(fileNameOpen, value).toLowerCase());
+            }}
+            onChange={(editor, data, value) => {
+              this.setState({ resultFile: value });
             }}
           />   
         ) : (
