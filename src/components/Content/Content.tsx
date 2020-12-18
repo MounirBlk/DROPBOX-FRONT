@@ -63,6 +63,12 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       isEdit: false
     };
   }
+  beforeSend = (args: any) => {
+    const token = 'Bearer ' + localStorage.getItem('security');
+    args.ajaxSettings.beforeSend = (args: any) => {
+        args.httpRequest.setRequestHeader("Authorization", token);
+    }
+  }
 
   fileLoad = (args: any) => {
     const target = args.element;
@@ -109,7 +115,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
 
   getFileRequest = (fichier: string, args: any, isEdit: boolean) => {
     axios
-      .post('http://localhost:4000/GetFile', { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name })
+      .post('http://localhost:4000/GetFile/' + localStorage.getItem('security') , { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name })
       .then((response) => {
           if(isEdit){
             this.setState({ contentFile: response.data });
@@ -135,7 +141,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       resultFile : this.state.resultFile,
     }
     axios
-      .post('http://localhost:4000/SaveFile', payload)
+      .post('http://localhost:4000/SaveFile/' + localStorage.getItem('security'), payload)
       .then((response) => {
           console.log(response.data)
           this.setState({ openFileDialog: false });
@@ -235,6 +241,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                   downloadUrl:"http://localhost:4000/Download",// hostUrl + 'api/FileManager/Download'
                   uploadUrl:  "http://localhost:4000/Upload" ,// hostUrl + 'api/FileManager/Upload'
                 }} 
+                beforeSend={this.beforeSend.bind(this)}
                 /*path='/download' */
                 /*showFileExtension= {false}*/
                 /*enablePersistence={true}*/
