@@ -41,7 +41,7 @@ export class App extends React.PureComponent {
             <PrivateRoute exact={true} path={'/dashboard'} component={()=>(
               <DashboardProps.Display />
             )} />
-            <Route exact={true} path={'/resetPassword'} render={()=>(
+            <Route exact={true} path={'/resetPassword'} component={()=>(
               <ResetPassword.Display />
             )} />
             <Route exact={true} path={'/register'} render={()=>(
