@@ -14,3 +14,11 @@ export interface UserLogin{
     id_user: string;
     token: string;
 }
+
+export interface UserInterface{
+    _id: string;
+    email: string;
+    firstname:string;
+    lastname:string;
+    username:string;
+}
