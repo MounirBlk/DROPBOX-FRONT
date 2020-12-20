@@ -216,9 +216,30 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   }
   shareFileFolder = () => {
     if((this.state.userNameShare !== null && this.state.userNameShare !== undefined) && (this.state.fileDataShare !== null && this.state.fileDataShare !== undefined)){
-      console.log('Partage avec '+ this.state.userNameShare?.lastname)
-      console.log('Le fichier/dossier sélectionner est: ' + this.state.fileDataShare.name)
-      console.log('Data: ' + JSON.stringify(this.state.fileDataShare))
+      console.log('Data1: '+ JSON.stringify(this.state.userNameShare))
+      console.log('Data2: ' + JSON.stringify(this.state.fileDataShare))
+
+      let payload = {
+        sharedTo : this.state.userNameShare,
+        sharedFrom : this.state.fileDataShare
+      }
+      
+      const config = {
+        headers: {
+          'Authorization': 'Bearer '+localStorage.getItem('security')
+        },
+      };
+  
+      axios
+        .post('http://localhost:4000/Share', payload, config)
+        .then((response) => {
+          if(!response.data.error){
+            this.setState({ isDialogShare: false })
+          }
+        })
+        .catch((error) => {
+          console.log(error)   
+        });
     }
   }
   addFolder = (event: any) => {
