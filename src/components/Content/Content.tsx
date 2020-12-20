@@ -4,12 +4,15 @@ import AllInboxIcon from '@material-ui/icons/AllInbox';
 import Close from '@material-ui/icons/Close'
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import styles, { Styles } from './styles';
-import {WithStyles, withStyles,IconButton,Tooltip as TooltipM,Toolbar,AppBar,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, Avatar, Dialog} from '@material-ui/core';
+import {WithStyles, withStyles,IconButton,Tooltip as TooltipM,Toolbar,AppBar,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, DialogTitle , Dialog, DialogContent} from '@material-ui/core';
 import {  DetailsView, FileManagerComponent, NavigationPane, Toolbar as ToolbarFile, Inject, BreadCrumbBar, FileLoadEventArgs  } from '@syncfusion/ej2-react-filemanager';
 import axios from 'axios';
 import { getValue, select, L10n, setCulture } from '@syncfusion/ej2-base';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import * as EJ2_LOCALE from "./fr.json";
+import { Autocomplete } from '@material-ui/lab';
+import { UserInterface } from '../../interfaces/user';
+import { DialogActions } from '@material-ui/core';
 L10n.load({ fr: EJ2_LOCALE.fr });
 setCulture("fr");
 require('codemirror/lib/codemirror.css');
@@ -32,8 +35,6 @@ interface P {
 //state
 interface S {
   //mobileOpen:boolean;
-  expanded: Array<string>;
-  selected: Array<string>;
   //hostUrl:string;
   openFileDialog : boolean;
   contentFile: string;
@@ -43,24 +44,44 @@ interface S {
   isEdit: boolean;
   fileBase: any;
   mimeType: string;
+  isDialogShare : boolean;
+  utilisateurs: Array<UserInterface>;
+  userNameShare: UserInterface | null;
+  fileDataShare: any;
+  argsListFilesShare: Array<ArgDataFile>;
 }
-
+interface ArgDataFile{
+  filterPath: string; 
+  isFile: boolean; 
+  name: string; 
+  type: string; 
+  parentPath: string; 
+}
 export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>{
   public static Display = withStyles(styles as any)(ContentProps) as React.ComponentType<P>    //Methode de lecture
   constructor(props: P & WithStyles<Styles>) {
     super(props);
     this.state = {
+      utilisateurs : [],
+      userNameShare:{
+        _id: '',
+        username: '',
+        firstname: '',
+        lastname:'',
+        email: ''
+      },
+      fileDataShare:{},
       fileBase:null,
       mimeType: '',
       openFileDialog: false,
       contentFile: '',
       resultFile: '',
       args: {},
+      argsListFilesShare: [],
       fileNameOpen: '',
       //hostUrl : "https://ej2-aspcore-service.azurewebsites.net/",
-      expanded: [],
-      selected: [],
-      isEdit: false
+      isEdit: false,
+      isDialogShare: false
     };
   }
   beforeSend = (args: any) => {
@@ -86,7 +107,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   fileOpen = (args: any) => {
     let ext = args.fileDetails.type;
     if(ext?.toLowerCase() !== '' && ext?.toLowerCase() !== '.png' && ext?.toLowerCase() !== '.jpg' && ext?.toLowerCase() !== '.svg' && ext?.toLowerCase() !== '.zip' && ext?.toLowerCase() !== '.rar'){
-      if(ext?.toLowerCase() === '.html' || ext?.toLowerCase() === '.css' || ext?.toLowerCase() === '.js' || 
+      if(ext?.toLowerCase() === '.html' || ext?.toLowerCase() === '.css' || ext?.toLowerCase() === '.js' || ext?.toLowerCase() === '.txt' ||
       ext?.toLowerCase() === '.php' || ext?.toLowerCase() === '.sql' || ext?.toLowerCase() === '.ts' || 
       ext?.toLowerCase() === '.json' || ext?.toLowerCase() === '.xml' || ext?.toLowerCase() === '.vue'){
         this.getFileRequest(args.fileDetails.filterPath + args.fileDetails.name , args, true)
@@ -104,18 +125,26 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
   };
   onSuccess = (args: any) => {
     console.log("L'action a bien fonctionné !",args);
+    if(args.action === 'read'){
+      let listFiles: { filterPath: string; isFile: boolean; name: string; type: string; parentPath: string; }[] = [];
+      args.result.files.forEach((item: any) => {
+        listFiles.push({filterPath: item.filterPath,isFile: item.isFile,name: item.name,type: item.type,parentPath: args.result.cwd.name})
+      })
+      this.setState({ argsListFilesShare : listFiles });
+    }
   };
   onFailure = (args: any) => {
     console.log("Veuillez rafraîchir la page !",args);
   };
 
-  handleClickClose = () => {
-    this.setState({ openFileDialog: false });
-  }
-
   getFileRequest = (fichier: string, args: any, isEdit: boolean) => {
+    const config = {
+      headers: {
+        'Authorization': 'Bearer '+localStorage.getItem('security')
+      },
+    };
     axios
-      .post('http://localhost:4000/GetFile/' + localStorage.getItem('security') , { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name })
+      .post('http://localhost:4000/GetFile', { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name }, config)
       .then((response) => {
           if(isEdit){
             this.setState({ contentFile: response.data });
@@ -140,10 +169,16 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       filePath: this.state.args.fileDetails.filterPath + this.state.args.fileDetails.name,
       resultFile : this.state.resultFile,
     }
+
+    const config = {
+      headers: {
+        'Authorization': 'Bearer '+localStorage.getItem('security')
+      },
+    };
+
     axios
-      .post('http://localhost:4000/SaveFile/' + localStorage.getItem('security'), payload)
+      .post('http://localhost:4000/SaveFile', payload, config)
       .then((response) => {
-          console.log(response.data)
           this.setState({ openFileDialog: false });
       })
       .catch((error) => {
@@ -158,6 +193,55 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     }
   }
 
+  getUser = () => {
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('security')
+      },
+    };
+
+    axios
+      .get('http://localhost:4000/users', config)
+      .then((response) => {
+        this.setState({ utilisateurs : response.data.users });
+      })
+      .catch((error) => {
+        console.log(error)   
+      });
+  }
+
+  shareFileOpen = () => {
+    this.getUser();
+    this.setState({ isDialogShare: true })
+  }
+  shareFileFolder = () => {
+    if((this.state.userNameShare !== null && this.state.userNameShare !== undefined) && (this.state.fileDataShare !== null && this.state.fileDataShare !== undefined)){
+      console.log('Data1: '+ JSON.stringify(this.state.userNameShare))
+      console.log('Data2: ' + JSON.stringify(this.state.fileDataShare))
+
+      let payload = {
+        sharedTo : this.state.userNameShare,
+        sharedFrom : this.state.fileDataShare
+      }
+      
+      const config = {
+        headers: {
+          'Authorization': 'Bearer '+localStorage.getItem('security')
+        },
+      };
+  
+      axios
+        .post('http://localhost:4000/Share', payload, config)
+        .then((response) => {
+          if(!response.data.error){
+            this.setState({ isDialogShare: false })
+          }
+        })
+        .catch((error) => {
+          console.log(error)   
+        });
+    }
+  }
   addFolder = (event: any) => {
     if(event.target.files.length > 0){
       for(let i = 0; i < event.target.files.length; i++){
@@ -194,7 +278,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
 
   render(){
     const { classes } = this.props;
-    const { selected,expanded,openFileDialog,args,contentFile,fileNameOpen,resultFile,isEdit,fileBase,mimeType} = this.state;
+    const { openFileDialog,args,contentFile,fileNameOpen,resultFile,isEdit,fileBase,mimeType,isDialogShare,utilisateurs,userNameShare,argsListFilesShare} = this.state;
     //console.log(window.innerHeight)
     return(
       <Paper className={classes.paper}>
@@ -208,8 +292,8 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                 Dropbox Manager
               </Grid>
               <Grid item>
-              <Button autoFocus color="inherit">
-                <AccountTreeOutlinedIcon />Partager
+              <Button variant="outlined" color="inherit" onClick={this.shareFileOpen}>
+                <AccountTreeOutlinedIcon />Système de Partage
               </Button>
               </Grid>
               <Grid item>
@@ -257,10 +341,10 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             </div>
           </Typography>
         </div>
-        <Dialog fullScreen open={openFileDialog} onClose={this.handleClickClose}>
+        <Dialog fullScreen open={openFileDialog} onClose={() => this.setState({ openFileDialog: false })}>
         <AppBar className={classes.appBarFile}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={this.handleClickClose} aria-label="close">
+            <IconButton edge="start" color="inherit" onClick={() => this.setState({ openFileDialog: false })} aria-label="close">
               <Close />
             </IconButton>
             <Typography variant="h6" className={classes.titleFile}>
@@ -270,7 +354,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             <Button autoFocus color="inherit" onClick={this.saveFile}>
               Sauvegarder
             </Button>) : (
-            <Button autoFocus color="inherit" onClick={this.handleClickClose}>
+            <Button autoFocus color="inherit" onClick={() => this.setState({ openFileDialog: false })}>
               Fermer
             </Button>
             )}
@@ -307,14 +391,44 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             editorDidMount={(editor,value) => {
               editor.setOption('mode', detect.contents(fileNameOpen, value).toLowerCase() === 'html' || detect.contents(fileNameOpen, value).toLowerCase() === 'vue' ? 'htmlmixed' : detect.contents(fileNameOpen, value).toLowerCase() === 'json' ? 'jsx' : detect.contents(fileNameOpen, value).toLowerCase() === 'sqlpl' ? 'sql' : fileNameOpen.split('.')[1] === 'ts' ? 'javascript' : detect.contents(fileNameOpen, value).toLowerCase());
             }}
+            onChange={(editor, data, value) => {
+              this.setState({ resultFile: value });
+            }}
           />   
         ) : (
           <iframe src={"data:"+mimeType+";base64,"+fileBase} height="100%" width="100%"></iframe> // mimeType = application/pdf
           //<iframe src='https://view.officeapps.live.com/op/view.aspx?src=http://localhost:4000/GetFileContent/content*b.pdf' width='100%' height='600px'></iframe>
         )}
-
         </Dialog>
-      </Paper>
+        <Dialog onClose={() => this.setState({ isDialogShare: false })} aria-labelledby="form-dialog-title" open={isDialogShare}>
+          <DialogTitle id="form-dialog-title">Partager un fichier/dossier</DialogTitle>
+          <DialogContent>
+            <Autocomplete
+              onChange={(event, value) => this.setState({ userNameShare: value })}
+              options={utilisateurs}
+              getOptionLabel={(option) => option.lastname}
+              style={{ width: 300 }}
+              renderInput={(params) => <TextField {...params} label="Partager avec M/Mme" variant="outlined" />}
+            />
+            <br />
+            <Autocomplete
+              onChange={(event, value) => this.setState({ fileDataShare: value })}
+              options={argsListFilesShare}
+              getOptionLabel={(option) => option.name}
+              style={{ width: 300 }}
+              renderInput={(params) => <TextField {...params} label="Sélectionner le fichier/dossier" variant="outlined" />}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => this.setState({ isDialogShare: false })} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.shareFileFolder} color="primary">
+              Partager
+            </Button>
+          </DialogActions>
+        </Dialog>
+        </Paper>
     );
   }
 }
