@@ -394,7 +394,6 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
           />   
         ) : (
           <iframe src={"data:"+mimeType+";base64,"+fileBase} height="100%" width="100%"></iframe> // mimeType = application/pdf
-          //<iframe src='https://view.officeapps.live.com/op/view.aspx?src=http://localhost:4000/GetFileContent/content*b.pdf' width='100%' height='600px'></iframe>
         )}
         </Dialog>
         <Dialog onClose={() => this.setState({ isDialogShare: false })} aria-labelledby="form-dialog-title" open={isDialogShare}>
@@ -411,7 +410,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             <Autocomplete
               onChange={(event, value) => this.setState({ fileDataShare: value })}
               options={argsListFilesShare}
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={(option) => !option.isFile ? `Dossier:   ${option.name}` : `Fichier :   ${option.name}`}
               style={{ width: 300 }}
               renderInput={(params) => <TextField {...params} label="Sélectionner le fichier/dossier" variant="outlined" />}
             />
