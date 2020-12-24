@@ -5,7 +5,7 @@ import Close from '@material-ui/icons/Close'
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import styles, { Styles } from './styles';
 import {WithStyles, withStyles,IconButton,Tooltip as TooltipM,Toolbar,AppBar,Grid,Typography,Box,Paper,Link,Checkbox,FormControlLabel,TextField,CssBaseline,Button, DialogTitle , Dialog, DialogContent} from '@material-ui/core';
-import {  DetailsView, FileManagerComponent, NavigationPane, Toolbar as ToolbarFile, Inject, BreadCrumbBar, FileLoadEventArgs  } from '@syncfusion/ej2-react-filemanager';
+import {  DetailsView, FileManagerComponent, NavigationPane, Toolbar as ToolbarFile, Inject, BreadCrumbBar  } from '@syncfusion/ej2-react-filemanager';
 import axios from 'axios';
 import { getValue, select, L10n, setCulture } from '@syncfusion/ej2-base';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
@@ -49,6 +49,7 @@ interface S {
   userNameShare: UserInterface | null;
   fileDataShare: any;
   argsListFilesShare: Array<ArgDataFile>;
+  filterPathDirectory: string;
 }
 interface ArgDataFile{
   filterPath: string; 
@@ -81,7 +82,8 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       fileNameOpen: '',
       //hostUrl : "https://ej2-aspcore-service.azurewebsites.net/",
       isEdit: false,
-      isDialogShare: false
+      isDialogShare: false,
+      filterPathDirectory: ''
     };
   }
   beforeSend = (args: any) => {
@@ -90,19 +92,6 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
         args.httpRequest.setRequestHeader("Authorization", token);
     }
   }
-
-  fileLoad = (args: any) => {
-    const target = args.element;
-    if (args.module === 'DetailsView') {
-        const element = select('[title]', args.element);
-        const title = getValue('name', args.fileDetails) +'\n' + getValue('dateModified', args.fileDetails);
-        element.setAttribute('title', title);
-    }
-    else if (args.module === 'LargeIconsView') {
-        const title = getValue('name', args.fileDetails) +'\n' + getValue('dateModified', args.fileDetails);
-        target.setAttribute('title', title);
-    }
-  };
 
   fileOpen = (args: any) => {
     let ext = args.fileDetails.type;
@@ -131,6 +120,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
         listFiles.push({filterPath: item.filterPath,isFile: item.isFile,name: item.name,type: item.type,parentPath: args.result.cwd.name})
       })
       this.setState({ argsListFilesShare : listFiles });
+      this.setState({ filterPathDirectory : args.result.files[0].filterPath === null || args.result.files[0].filterPath === undefined || args.result.files[0].filterPath.trim().length === 0 ? '/' : args.result.files[0].filterPath });
     }
   };
   onFailure = (args: any) => {
@@ -159,7 +149,10 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
           this.setState({ isEdit: isEdit });          
       })
       .catch((error) => {
-        console.log(error)   
+        console.log(error)
+        setTimeout(() => {
+          document.location.reload(true);
+        }, 5000);   
       })
       .finally(() => this.setState({ openFileDialog: true }));
   }
@@ -180,9 +173,15 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       .post('http://localhost:4000/SaveFile', payload, config)
       .then((response) => {
           this.setState({ openFileDialog: false });
+          setTimeout(() => {
+            document.location.reload(true);
+          }, 5000);
       })
       .catch((error) => {
         console.log(error)   
+        setTimeout(() => {
+          document.location.reload(true);
+        }, 5000);
       });
   }
   _addDirectory = (params: any) => {
@@ -207,6 +206,9 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       })
       .catch((error) => {
         console.log(error)   
+        setTimeout(() => {
+          document.location.reload(true);
+        }, 5000);
       });
   }
 
@@ -232,50 +234,60 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
         .then((response) => {
           if(!response.data.error){
             this.setState({ isDialogShare: false })
+            setTimeout(() => {
+              document.location.reload(true);
+            }, 5000);
           }
         })
         .catch((error) => {
           console.log(error)   
+          setTimeout(() => {
+            document.location.reload(true);
+          }, 5000);
         });
     }
   }
   addFolder = (event: any) => {
     if(event.target.files.length > 0){
+      let fileDataTab: Array<any> = []
       for(let i = 0; i < event.target.files.length; i++){
-        console.log(event.target.files[i].webkitRelativePath.split('/').slice(0,-1))
-        console.log(event.target.files[i].name)
+        fileDataTab.push({webkitRelativePath: event.target.files[i].webkitRelativePath, name: event.target.files[i].name})
       }
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryu2bwWC2UJRwib11V',
+          'Authorization': 'Bearer '+localStorage.getItem('security')         
+        },
+      };
+      const formData = new FormData()
+      for (const file of event.target.files) {
+        formData.append('uploadFiles', file)
+        formData.append('fileDataTab', file.webkitRelativePath)
+      }
+      formData.append('path', this.state.filterPathDirectory === '' ? '/' : this.state.filterPathDirectory)
+      formData.append('action', 'save')
+      formData.append('typeUpload', 'folder')
+
+      axios.post('http://localhost:4000/Upload', formData , config)
+        .then((response) => {
+          setTimeout(() => {
+            document.location.reload(true);
+          }, 5000);
+        })
+        .catch((error) => {
+          console.log(error)
+          setTimeout(() => {
+            document.location.reload(true);
+          }, 5000);
+        });
     }else{
       return console.log('Aucun dossier a été ajouté')
     }
   }
 
-  /*upload = (e: any): void => {
-    console.log('Upload...')
-    let files = e.target.files;
-    console.log(files);
-
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    };
-    let payload= {
-      isFile:true,
-      file: files[0]
-    }
-    axios.post('http://localhost:4000/upload', payload,config)
-      .then((response) => {
-        console.log('Uploaded-')
-      })
-      .catch((error) => {
-        console.log(error)
-      });
-  }*/
-
   render(){
     const { classes } = this.props;
-    const { openFileDialog,args,contentFile,fileNameOpen,resultFile,isEdit,fileBase,mimeType,isDialogShare,utilisateurs,userNameShare,argsListFilesShare} = this.state;
+    const { openFileDialog,args,contentFile,fileNameOpen,resultFile,isEdit,fileBase,mimeType,isDialogShare,utilisateurs,userNameShare,argsListFilesShare, filterPathDirectory} = this.state;
     //console.log(window.innerHeight)
     return(
       <Paper className={classes.paper}>
@@ -298,6 +310,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                   accept="*"
                   style={{ display: 'none' }}
                   id="raised-button-file"
+                  name='uploadFiles'
                   multiple
                   ref={node => this._addDirectory(node)}
                   type="file"
@@ -328,7 +341,6 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                 /*enablePersistence={true}*/
                 /*uploadSettings={{ maxFileSize: 233332, minFileSize: 120, autoUpload: true }}*/ //maxsize: 30000000
                 fileOpen = {this.fileOpen.bind(this)}
-                fileLoad = {this.fileLoad.bind(this)}
                 created = {this.onCreated.bind(this)}
                 success = {this.onSuccess.bind(this)} 
                 failure = {this.onFailure.bind(this)}>
