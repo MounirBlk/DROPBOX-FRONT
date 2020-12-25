@@ -120,7 +120,11 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
         listFiles.push({filterPath: item.filterPath,isFile: item.isFile,name: item.name,type: item.type,parentPath: args.result.cwd.name})
       })
       this.setState({ argsListFilesShare : listFiles });
-      this.setState({ filterPathDirectory : args.result.files[0].filterPath === null || args.result.files[0].filterPath === undefined || args.result.files[0].filterPath.trim().length === 0 ? '/' : args.result.files[0].filterPath });
+      if(args.result.files.length === 0){
+        this.setState({ filterPathDirectory : '/'});
+      }else{
+        this.setState({ filterPathDirectory : args.result.files[0].filterPath === null || args.result.files[0].filterPath === undefined ? '/' : args.result.files[0].filterPath });
+      }
     }
   };
   onFailure = (args: any) => {
@@ -134,7 +138,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       },
     };
     axios
-      .post('http://localhost:4000/GetFile', { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name }, config)
+      .post('https://digitaldropbox.twilightparadox.com/GetFile', { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name }, config)
       .then((response) => {
           if(isEdit){
             this.setState({ contentFile: response.data });
@@ -170,7 +174,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     };
 
     axios
-      .post('http://localhost:4000/SaveFile', payload, config)
+      .post('https://digitaldropbox.twilightparadox.com/SaveFile', payload, config)
       .then((response) => {
           this.setState({ openFileDialog: false });
           setTimeout(() => {
@@ -200,7 +204,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     };
 
     axios
-      .get('http://localhost:4000/users', config)
+      .get('https://digitaldropbox.twilightparadox.com/users', config)
       .then((response) => {
         this.setState({ utilisateurs : response.data.users });
       })
@@ -230,7 +234,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       };
   
       axios
-        .post('http://localhost:4000/Share', payload, config)
+        .post('https://digitaldropbox.twilightparadox.com/Share', payload, config)
         .then((response) => {
           if(!response.data.error){
             this.setState({ isDialogShare: false })
@@ -268,7 +272,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       formData.append('action', 'save')
       formData.append('typeUpload', 'folder')
 
-      axios.post('http://localhost:4000/Upload', formData , config)
+      axios.post('https://digitaldropbox.twilightparadox.com/Upload', formData , config)
         .then((response) => {
           setTimeout(() => {
             document.location.reload(true);
@@ -330,10 +334,10 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             <div className="control-section">
               <div className="filemanager-container">
                 <FileManagerComponent id="file" view="LargeIcons" ajaxSettings={{
-                  getImageUrl:  "http://localhost:4000/GetImage",// hostUrl + "api/FileManager/GetImage"
-                  url: "http://localhost:4000/Manager",// hostUrl +"api/FileManager/FileOperations"
-                  downloadUrl:"http://localhost:4000/Download",// hostUrl + 'api/FileManager/Download'
-                  uploadUrl:  "http://localhost:4000/Upload" ,// hostUrl + 'api/FileManager/Upload'
+                  getImageUrl:  "https://digitaldropbox.twilightparadox.com/GetImage",// hostUrl + "api/FileManager/GetImage"
+                  url: "https://digitaldropbox.twilightparadox.com/Manager",// hostUrl +"api/FileManager/FileOperations"
+                  downloadUrl:"https://digitaldropbox.twilightparadox.com/Download",// hostUrl + 'api/FileManager/Download'
+                  uploadUrl:  "https://digitaldropbox.twilightparadox.com/Upload" ,// hostUrl + 'api/FileManager/Upload'
                 }} 
                 beforeSend={this.beforeSend.bind(this)}
                 /*path='/download' */
