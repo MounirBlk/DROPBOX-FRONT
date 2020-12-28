@@ -1,6 +1,7 @@
-import { WithStyles, withStyles, InputAdornment, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Snackbar} from '@material-ui/core';
+import { WithStyles, withStyles, InputAdornment, Button, CssBaseline, TextField, Grid, Box, Typography, Container, Snackbar} from '@material-ui/core';
 import MuiAlert, {Alert, AlertTitle } from '@material-ui/lab';
 import * as React from 'react'; 
+import { Link } from 'react-router-dom'
 import styles, { Styles } from './styles';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import { Email } from '../../interfaces/password';
@@ -34,9 +35,8 @@ export class ResetPassword extends React.PureComponent<P & WithStyles<Styles>, S
     return (
       <Typography variant="body2" color="textSecondary" align="center">
         {'Copyright © '}
-        <Link color="inherit">
           Dropbox
-      </Link>{' '}
+    {' '}
         {new Date().getFullYear()}
         {'.'}
       </Typography>
@@ -130,7 +130,7 @@ export class ResetPassword extends React.PureComponent<P & WithStyles<Styles>, S
           </Button>
               <Grid container justify="flex-end">
                 <Grid item>
-                  <Link href="/" variant="body2">
+                  <Link to="/">
                     Déjà client ? Page de connexion
               </Link>
                 </Grid>

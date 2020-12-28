@@ -1,4 +1,4 @@
-import { WithStyles, withStyles,Backdrop , Fade, Modal, ThemeProvider, InputAdornment,Card,CardContent,CardActions, Button,FormControl,InputLabel,Select, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Snackbar} from '@material-ui/core';
+import { WithStyles, withStyles,Backdrop , Fade, Modal, ThemeProvider, InputAdornment,Card,CardContent,CardActions, Button,FormControl,InputLabel,Select, CssBaseline, TextField, Grid, Box, Typography, Container, Snackbar} from '@material-ui/core';
 import MuiAlert, {Alert, AlertTitle } from '@material-ui/lab';
 import * as React from 'react'; 
 import styles, { Styles } from './styles';
@@ -8,6 +8,7 @@ import Hidden from '@material-ui/core/Hidden';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditAttributesIcon from '@material-ui/icons/EditAttributes';
 import EmailIcon from '@material-ui/icons/Email';
+import { Link } from 'react-router-dom'
 import LockIcon from '@material-ui/icons/Lock';
 import PhoneIcon from '@material-ui/icons/Phone';
 import { User } from '../../interfaces/user';
@@ -130,12 +131,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
       }
     })
     .catch((error : any) => {
-      this.setState({ message: { message: "Token invalide ! ", error: false }, success: true });
-      setTimeout(() => {
-        localStorage.clear();
-        sessionStorage.clear();
-        document.location.href = "/"
-      }, 3500);
+      this.setState({ message: { message: "erreur serveur", error: true }, error: true })
     });
   }
 
@@ -187,7 +183,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
         }else{
           this.setState({ message: { message: "modification prise en compte", error: false }, success: true });
           setTimeout(() => {
-            document.location.href = "/user"
+            document.location.href = "/profile"
           }, 3500);}
       })
       .catch((error : any) => {
@@ -251,9 +247,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit">
-        Dropbox
-    </Link>{' '}
+        Dropbox {' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -347,18 +341,19 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
                       autoFocus
                     />
                   </Grid>
+
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="lastName"
-                      disabled={this.state.isActive}
-                      label="Nom de famille"
+                      autoComplete="fname"
                       name="lastName"
+                      variant="outlined"
+                      fullWidth
+                      disabled={this.state.isActive}
+                      id="lastName"
+                      label="Nom de famille"
                       type="text"
                       value={this.state.lastName}
-                      onChange={() => this.handleChangeLastName}
+                      onChange={this.handleChangeLastName}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
@@ -366,9 +361,10 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
                           </InputAdornment>
                         ),
                       }}
-                      autoComplete="lname"
+                      autoFocus
                     />
                   </Grid>
+                  
                   <Grid item xs={12} sm={12}>
                     <TextField
                       variant="outlined"

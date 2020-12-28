@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { WithStyles, Snackbar, Select, FormControl, InputLabel, withStyles, InputAdornment, Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Grid, Box, Typography, Container } from '@material-ui/core';
+import { WithStyles, Snackbar, Select, FormControl, InputLabel, withStyles, InputAdornment, Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Grid, Box, Typography, Container } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/Lock';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import PhoneIcon from '@material-ui/icons/Phone';
@@ -7,6 +7,7 @@ import EmailIcon from '@material-ui/icons/Email';
 import MuiAlert, { Alert, AlertTitle } from '@material-ui/lab';
 import styles, { Styles } from './styles';
 import { User } from '../../interfaces/user';
+import { Link } from 'react-router-dom'
 import { stringVerif, email, password } from '../../middleware/Verif/Verif';
 import axios from 'axios';
 
@@ -96,7 +97,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
             }, 3500);}
         })
         .catch((error) => {
-          this.setState({ message: { message: "erreur serveur", error: true }, error: true })
+          this.setState({ message: { message: error.data.message, error: true }, error: true });
         });
     }
   };
@@ -152,11 +153,8 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
     return (
       <Typography variant="body2" color="textSecondary" align="center">
         {'Copyright © '}
-        <Link color="inherit">
-          Dropbox
-      </Link>{' '}
+          Dropbox 
         {new Date().getFullYear()}
-        {'.'}
       </Typography>
     );
   }
@@ -375,7 +373,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
                   control={<Checkbox value="true" color="primary"  onChange={this.handleChangeRGPD}/>}
                   label="J'accepte les conditions d'utilisation et j'autorise Dropbox à utiliser les données a des fins d'amerioration."
                 />
-                <Link href="/RGPD" variant="body2">
+                <Link to="/RGPD">
                   voir les CGUs
                 </Link>
               </Grid>
@@ -391,7 +389,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
           </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                <Link href="/" variant="body2">
+                <Link to="/">
                   Déjà client ? Page de connexion
               </Link>
               </Grid>
