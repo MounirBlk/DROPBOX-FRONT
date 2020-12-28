@@ -292,7 +292,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                             })
                             .then((response) => {
                               localStorage.setItem("security", response.data.token)
-                              document.location.href = "/dashboard"
+                              document.location.href = "/dashboard" 
                             })
                             .catch((error) => {
                               document.location.href = "/register"
