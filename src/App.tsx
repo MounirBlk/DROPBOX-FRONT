@@ -20,13 +20,13 @@ export class App extends React.PureComponent {
     return (
       <BrowserRouter>
           <Switch>
-            {/* <Route exact={true} path={'/'} component={()=>(
-              <Google.Display />
-            )} /> */}
+            <Route exact={true} path={'/'} component={()=>(
+              <Login.Display />
+            )} />
             <Route exact={true} path={'/login'} component={()=>(
               <Login.Display />
             )} />
-             <Route exact={true} path={'/google/connexion'} component={()=>(
+             <PrivateRoute exact={true} path={'/google/connexion'} component={()=>(
               <Google.Display />
             )} />
             <PrivateRoute exact={true} path={'/dashboard'} component={()=>(

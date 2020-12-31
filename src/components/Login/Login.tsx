@@ -223,44 +223,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 </Button>
                 </form>
                 <Grid container spacing={3}>
-                <Grid item xs={12} sm={8} md={4}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  onClick={this.twitch}
-                  className={classes.submit5}
-                >
-                  <ForumIcon/>
-                  Twitch
-                </Button>
-                </Grid>
-               
-                <Grid item xs={12} sm={8} md={4}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={this.facebook}
-                  className={classes.submit3}
-                >
-                <FacebookIcon /> Facebook
-                </Button>
-                </Grid >
-                <Grid item xs={12} sm={8} md={4}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  onClick={this.discord}
-                  className={classes.submit4}
-                >
-                  <ModeCommentIcon/>
-                  Discord
-                </Button>
-                </Grid>
-                <Grid item xs={12} sm={8} md={4}>
+                <Grid item xs={12} sm={8} md={12}>
                 <FirebaseAuthProvider {...config} firebase={firebase}>
                   <div>
                     <Button
@@ -304,30 +267,6 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                   </div>
                 </FirebaseAuthProvider>
                 </Grid >
-                <Grid item xs={12} sm={8} md={4}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  onClick={this.github}
-                  className={classes.submit6}
-                >
-                  <GitHubIcon/>
-                  Github
-                </Button>
-                </Grid>
-                <Grid item xs={12} sm={8} md={4}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  onClick={this.linkedin}
-                  className={classes.submit7}
-                >
-                  <LinkedInIcon/>
-                  Linkedin
-                </Button>
-                </Grid>
                 </Grid>
                 <Grid container>
                   <Grid item xs>
