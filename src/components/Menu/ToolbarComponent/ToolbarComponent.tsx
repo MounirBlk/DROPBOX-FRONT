@@ -5,17 +5,21 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
-import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import {
+  FirebaseAuthProvider,
+  FirebaseAuthConsumer,
+  IfFirebaseAuthed,
+  IfFirebaseAuthedAnd
+} from "@react-firebase/auth";
+import {config } from "./../../../config";
+import firebase from "firebase/app";
+
 
 interface P {
   openDrawerHandler: any
@@ -60,11 +64,6 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
           MobileMoreAnchorEl: event.currentTarget
         });
       };
-
-      deconnexion = (event:any) => {
-        localStorage.clear();
-        document.location.href = '/'
-      }
     
       render() {
         const { classes } = this.props;
@@ -82,7 +81,7 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
             open={isMenuOpen}
             onClose={this.handleMenuClose}
 
-          >
+          > <FirebaseAuthProvider {...config} firebase={firebase}>
             <MenuItem onClick={this.handleMenuClose}><IconButton
                 aria-label="Deconnexion"
                 aria-controls="Deconnexion"
@@ -91,8 +90,12 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
               >
                 <PowerSettingsNewIcon />
               </IconButton>
-              <div onClick={this.deconnexion}
->Deconnexion</div></MenuItem>
+              <div  onClick={() => {
+                  firebase.auth().signOut();
+                  localStorage.clear()
+                  document.location.href = "/login"
+                }}
+>Deconnexion</div></MenuItem></FirebaseAuthProvider>
           </Menu>
         );
     
@@ -114,6 +117,7 @@ export class ToolbarComponent extends React.PureComponent<P & WithStyles<Styles>
                 aria-controls="Deconnexion"
                 aria-haspopup="true"
                 color="inherit"
+
               >
                 <PowerSettingsNewIcon />
               </IconButton>

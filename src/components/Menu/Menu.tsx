@@ -3,6 +3,7 @@ import {ToolbarComponent} from "./ToolbarComponent/ToolbarComponent";
 import {DrawerComponent} from "./DrawerComponent/DrawerComponent";
 import styles, { Styles } from './styles';
 import { WithStyles, withStyles } from '@material-ui/core';
+import { token } from '../../middleware/Verif/Verif';
 
 
 interface P {
@@ -40,6 +41,7 @@ export class Menu extends React.PureComponent<P & WithStyles<Styles>, S>{
         return (
         <div>
             <ToolbarComponent.Display openDrawerHandler={this.openDrawer} />
+            {token(localStorage.getItem("security") ? localStorage.getItem("security") : "")}
             <DrawerComponent.Display left={this.state.left} toggleDrawerHandler={this.toggleDrawer} />
         </div>
         );

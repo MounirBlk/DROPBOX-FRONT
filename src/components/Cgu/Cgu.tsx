@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styles, { Styles } from './styles';
+import { Link } from 'react-router-dom'
 import { WithStyles, withStyles, Button,Card,CardActions,CardContent,Typography } from '@material-ui/core';
 
 interface P {
@@ -80,10 +81,7 @@ export class Cgu extends React.PureComponent<P & WithStyles<Styles>, S>{
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <Button 
-                            fullWidth
-                            variant="contained"
-                            className={classes.submit} color="primary" href="/register">Retour à accueil</Button>
+                        <Link className={classes.submit} color="primary" to="/register">Retour à accueil</Link>
                     </CardActions>
                 </Card>
         ) 

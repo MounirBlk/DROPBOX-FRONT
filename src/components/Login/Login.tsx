@@ -1,6 +1,8 @@
+
+
 import React from 'react';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import {WithStyles, Snackbar,InputAdornment, withStyles,Grid,Typography,Box,Paper,Link,TextField,CssBaseline,Button, Avatar} from '@material-ui/core';
+import {WithStyles, Snackbar,InputAdornment, withStyles,Grid,Typography,Box,Paper,TextField,CssBaseline,Button, Avatar} from '@material-ui/core';
 import styles, { Styles } from './styles';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined';
@@ -9,12 +11,22 @@ import LockOpenOutlinedIcon from '@material-ui/icons/LockOpenOutlined';
 import { UserLogin, errorRequest } from '../../interfaces/user';
 import { email, password } from '../../middleware/Verif/Verif';
 import FacebookIcon from '@material-ui/icons/Facebook';
+import { Link, Redirect } from 'react-router-dom'
 import EmailIcon from '@material-ui/icons/Email';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import axios from 'axios';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
 import ForumIcon from '@material-ui/icons/Forum';
 import GitHubIcon from '@material-ui/icons/GitHub';
+import history from '../../history';
+import {
+  FirebaseAuthProvider,
+  FirebaseAuthConsumer,
+  IfFirebaseAuthed,
+  IfFirebaseAuthedAnd
+} from "@react-firebase/auth";
+import {config } from "./../../config";
+import firebase from "firebase/app";
 
 
 
@@ -56,15 +68,12 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
   };
 
     Copyright = () => {
+
       return (
           <Typography variant="body2" color="textSecondary" align="center">
               {'Copyright © DropBox '}{new Date().getFullYear()}
           </Typography>
       );
-    }
-
-    google = () => {
-      document.location.href =  'http://localhost:4000/google/';
     }
 
     facebook = () => {
@@ -107,9 +116,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
           }else{
             this.setState({ message: { message: response.data.message, error: false, id_user: response.data.id_user, token: response.data.token}, success: true });
             localStorage.setItem("security", response.data.token)
-            setTimeout(() => {
-              document.location.href = "/dashboard"
-            }, 1000);
+            document.location.href = "/dashboard"
           }
         })
         .catch((error) => {
@@ -216,87 +223,59 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 </Button>
                 </form>
                 <Grid container spacing={3}>
-                <Grid item xs={12} sm={8} md={4}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  onClick={this.twitch}
-                  className={classes.submit5}
-                >
-                  <ForumIcon/>
-                  Twitch
-                </Button>
-                </Grid>
-               
-                <Grid item xs={12} sm={8} md={4}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={this.facebook}
-                  className={classes.submit3}
-                >
-                <FacebookIcon /> Facebook
-                </Button>
+                <Grid item xs={12} sm={8} md={12}>
+                <FirebaseAuthProvider {...config} firebase={firebase}>
+                  <div>
+                    <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    className={classes.submit2}
+                    onClick={() => {
+                      const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+                      firebase.auth().signInWithPopup(googleAuthProvider);
+                    }}
+                  >
+                  <EmailIcon />Via  Google
+                  </Button>
+                    <FirebaseAuthConsumer>
+                      {({ isSignedIn, user, providerId }) => {
+
+                        localStorage.setItem("user", JSON.stringify({user}))
+                        localStorage.setItem("sign", JSON.stringify({isSignedIn}))
+                      }}
+                    </FirebaseAuthConsumer>
+                    <div>
+                      <IfFirebaseAuthed>
+                        {() => {
+                          axios({
+                              method: 'post',
+                              url: 'http://localhost:4000/google/auth/co',
+                              data : {users:localStorage.getItem("user")}
+                            })
+                            .then((response) => {
+                              localStorage.setItem("security", response.data.token)
+                              document.location.href = "/dashboard" 
+                            })
+                            .catch((error) => {
+                              document.location.href = "/register"
+                              
+                            });    
+                        }}
+                      </IfFirebaseAuthed>
+                    </div>
+                  </div>
+                </FirebaseAuthProvider>
                 </Grid >
-                <Grid item xs={12} sm={8} md={4}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  onClick={this.discord}
-                  className={classes.submit4}
-                >
-                  <ModeCommentIcon/>
-                  Discord
-                </Button>
-                </Grid>
-                <Grid item xs={12} sm={8} md={4}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  className={classes.submit2}
-                  onClick={this.google}
-                >
-                <EmailIcon /> Google
-                </Button>
-                </Grid >
-                <Grid item xs={12} sm={8} md={4}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  onClick={this.github}
-                  className={classes.submit6}
-                >
-                  <GitHubIcon/>
-                  Github
-                </Button>
-                </Grid>
-                <Grid item xs={12} sm={8} md={4}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  onClick={this.linkedin}
-                  className={classes.submit7}
-                >
-                  <LinkedInIcon/>
-                  Linkedin
-                </Button>
-                </Grid>
                 </Grid>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="/resetPassword" variant="body2">
+                    <Link to="/resetPassword">
                       Mot de passe oublié ?
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="/register" variant="body2">
+                    <Link to="/register">
                       {"Inscription"}
                     </Link>
                   </Grid>

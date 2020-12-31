@@ -13,44 +13,35 @@ import PrivateRoute from './guard/guard'
 import {Prenium} from './components/Prenium/Prenium'
 import {Merci} from './components/Merci/Merci'
 import {Api} from './components/API/Api'
+import {Google} from './components/Google/Google'
 
 export class App extends React.PureComponent {
-  verif = () => {
-    setInterval(() =>{
-      if(localStorage.getItem("security") !== sessionStorage.getItem("security2") || localStorage.getItem("security") === undefined || sessionStorage.getItem("security2") === undefined)
-      {
-          document.location.href = "/";
-          localStorage.clear();
-          sessionStorage.clear();
-          return false;
-      }else{
-          return true;
-      }
-    },5000)
-  }
   render(){
     return (
       <BrowserRouter>
           <Switch>
-            <Route exact={true} path={'/'} render={()=>(
+            <Route exact={true} path={'/'} component={()=>(
               <Login.Display />
             )} />
-            <Route exact={true} path={'/login'} render={()=>(
+            <Route exact={true} path={'/login'} component={()=>(
               <Login.Display />
+            )} />
+             <PrivateRoute exact={true} path={'/google/connexion'} component={()=>(
+              <Google.Display />
             )} />
             <PrivateRoute exact={true} path={'/dashboard'} component={()=>(
               <DashboardProps.Display />
             )} />
-            <Route exact={true} path={'/resetPassword'} render={()=>(
+            <Route exact={true} path={'/resetPassword'} component={()=>(
               <ResetPassword.Display />
             )} />
-            <Route exact={true} path={'/register'} render={()=>(
+            <Route exact={true} path={'/register'} component={()=>(
               <Register.Display />
             )} />
-            <Route exact={true} path={'/rgpd'} render={()=>(
+            <Route exact={true} path={'/rgpd'} component={()=>(
               <Cgu.Display />
             )} />
-            <PrivateRoute  exact={true} path={'/user'}  component={()=>(
+            <PrivateRoute  exact={true} path={'/profile'}  component={()=>(
               <Profile.Display />
             )}  />
             <PrivateRoute  exact={true} path={'/prenium'}  component={()=>(

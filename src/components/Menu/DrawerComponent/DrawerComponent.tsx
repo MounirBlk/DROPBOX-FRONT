@@ -1,6 +1,6 @@
 import React from 'react';
 import styles, { Styles } from './styles';
-import { WithStyles, withStyles, Button } from '@material-ui/core';
+import { WithStyles, withStyles } from '@material-ui/core';
 import Drawer from "@material-ui/core/Drawer";
 import {
   List,
@@ -10,10 +10,8 @@ import {
   Divider
 } from "@material-ui/core";
 import StarIcon from '@material-ui/icons/Star';
-
+import { Link } from 'react-router-dom'
 import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import DraftsIcon from "@material-ui/icons/Drafts";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import HttpIcon from '@material-ui/icons/Http';
 
@@ -28,22 +26,6 @@ export class DrawerComponent extends React.PureComponent<P & WithStyles<Styles>>
 
 public static Display = withStyles(styles as any)(DrawerComponent) as React.ComponentType<P> 
 
-  Dropbox = (event:any) => {
-    document.location.href = '/dashboard';
-  }
-
-  User = (event:any) => {
-    document.location.href = '/user';
-  }
-
-  Api = (event:any) => {
-    document.location.href = '/api';
-  }
-
-  Prenium = (event:any) => {
-    document.location.href = '/prenium';
-  }
-
   render() {
     const { classes } = this.props;
 
@@ -55,30 +37,39 @@ public static Display = withStyles(styles as any)(DrawerComponent) as React.Comp
         onKeyDown={this.props.toggleDrawerHandler}
       >
         <List>
-          <ListItem button={true} onClick={this.Dropbox} >
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dropbox"/>
-          </ListItem>
-          <ListItem button={true}  onClick={this.User}>
+          <Link to="/dashboard">
+            <ListItem button={true}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dropbox"/>
+            </ListItem>
+          </Link>
+        
+          <Link to="/profile">
+            <ListItem button={true}>
             <ListItemIcon>
               <AccountCircleOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary="Profile"/>
-          </ListItem>
-          <ListItem button={true}  onClick={this.Api}>
+            </ListItem>
+          </Link>
+           <Link to="/">
+          <ListItem button={true}>
             <ListItemIcon>
               <HttpIcon />
             </ListItemIcon>
             <ListItemText primary="Documentation Api" />
-          </ListItem>   
-          <ListItem button={true}  onClick={this.Prenium}>
+          </ListItem> 
+          </Link>
+          <Link to="/prenium">
+          <ListItem button={true}>
             <ListItemIcon>
               <StarIcon />
             </ListItemIcon>
             <ListItemText primary="Prenium" />
-          </ListItem>   
+          </ListItem>     
+          </Link>
         </List>
         <Divider />
       </div>

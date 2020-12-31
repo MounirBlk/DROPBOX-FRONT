@@ -1,4 +1,4 @@
-import { WithStyles, withStyles, InputAdornment, Button,FormControl,InputLabel,Select, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Snackbar} from '@material-ui/core';
+import { WithStyles, withStyles, InputAdornment, Button,FormControl,InputLabel,Select, CssBaseline, TextField, Grid, Box, Typography, Container, Snackbar} from '@material-ui/core';
 import MuiAlert, {Alert, AlertTitle } from '@material-ui/lab';
 import StarIcon from '@material-ui/icons/Star';
 import * as React from 'react'; 
@@ -8,7 +8,7 @@ import { User } from '../../interfaces/user';
 import PanToolIcon from '@material-ui/icons/PanTool';
 import axios from 'axios'
 import {Menu} from "../Menu/Menu";
-
+import { Link } from 'react-router-dom'
 import PaymentIcon from '@material-ui/icons/Payment';
 import img from "./../../téléchargement.png";
 import img2 from "./../../téléchargement (1).png";
@@ -61,22 +61,15 @@ export class Prenium extends React.Component<P & WithStyles<Styles>, S> {
 
     axios(config)
     .then((response : any) => {
-      if(response.status === 200)
-      {
-        this.setState({ message: { message: "Votre abonnement va être supprimer ! ", error: false }, success: true });
-        if(response.status != 200){
-          this.setState({ message: { message: "Vous n'avez pas d'abonnement", error: true }, error: true });
-        }
-      }
+        this.setState({ message: { message: "Votre abonnement va être supprimer ! ", error: false }, error: true });
     })
     .catch((error : any) => {
-      this.setState({ message: { message: "Vous n'avez pas d'abonnement", error: true }, error: true });
+      this.setState({ message: { message: "Votre abonnement va être supprimer ! ", error: false }});
     });
   }
 
   Paiment = (event: any) => {
-    console.log('paiement')
-    event.preventDefault();
+        event.preventDefault();
 
     var obj = {
       cvc : this.state.cvc,
@@ -143,9 +136,8 @@ export class Prenium extends React.Component<P & WithStyles<Styles>, S> {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit">
         Dropbox
-    </Link>{' '}
+      {' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -168,14 +160,6 @@ export class Prenium extends React.Component<P & WithStyles<Styles>, S> {
             <Alert onClose={this.handleClose} severity="error">
               <AlertTitle>
                 Erreur lors de la modification
-            </AlertTitle>
-              {this.state.message.message}
-            </Alert>
-          </Snackbar>
-          <Snackbar open={success} autoHideDuration={6000} onClose={this.handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
-            <Alert onClose={this.handleClose} severity="error">
-              <AlertTitle>
-                Success
             </AlertTitle>
               {this.state.message.message}
             </Alert>
@@ -218,7 +202,7 @@ export class Prenium extends React.Component<P & WithStyles<Styles>, S> {
                       label="month"
                       name="month"
                       type="number"
-                      value={this.state.month}
+                      value={this.state.month === 0 ? '':this.state.month}
                       onChange={this.handleChangeMonth}
                       InputProps={{
                         startAdornment: (
@@ -237,8 +221,8 @@ export class Prenium extends React.Component<P & WithStyles<Styles>, S> {
                       label="year"
                       name="year"
                       type="number"
-                      value={this.state.year}
-                      onChange={this.handleChangeYear}
+                      value={this.state.year === 0 ? '':this.state.year}
+                      onChange={this.handleChangeYear }
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
@@ -255,7 +239,7 @@ export class Prenium extends React.Component<P & WithStyles<Styles>, S> {
                       id="cvc"
                       label="cvc"
                       name="cvc"
-                      value={this.state.cvc}
+                      value={this.state.cvc === 0 ? '':this.state.cvc}
                       onChange={this.handleChangeCvc}
                       type="number"
                       InputProps={{
@@ -276,7 +260,7 @@ export class Prenium extends React.Component<P & WithStyles<Styles>, S> {
                       label="carte bleu"
                       name="cartebleu"
                       type="number"
-                      value={this.state.card}
+                      value={this.state.card === 0 ? '':this.state.card}
                       onChange={this.handleChangeCarteBleu}
                       InputProps={{
                         startAdornment: (
