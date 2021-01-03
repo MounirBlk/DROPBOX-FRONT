@@ -86,7 +86,7 @@ export class Register extends React.PureComponent<P & WithStyles<Styles>, S>{
         password: this.state.password
       }
 
-      axios.post('http://localhost:4000/register', obj)
+      axios.post('https://digitaldropbox.twilightparadox.com/register', obj)
         .then((response) => {
           if(response.data.error != false) {
             return this.setState({ message: { message: response.data.message, error: true }, error: true })
