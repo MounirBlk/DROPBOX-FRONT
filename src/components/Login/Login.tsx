@@ -76,26 +76,6 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
       );
     }
 
-    facebook = () => {
-      document.location.href =  'http://localhost:4000/facebook/';
-    }
-
-    linkedin = () => {
-      document.location.href =  'http://localhost:4000/linkedin/';
-    }
-
-    discord = () => {
-      document.location.href =  'http://localhost:4000/discord/';
-    }
-
-    twitch = () => {
-      document.location.href =  'http://localhost:4000/twitch/';
-    }
-
-    github = () => {
-      document.location.href =  'http://localhost:4000/github/';
-    }
-
     login = (event: any) => {
       console.log('Connexion')
       event.preventDefault();
@@ -109,7 +89,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
         password: this.state.password
       }
 
-      axios.post('http://localhost:4000/login', obj)
+      axios.post('https://digitaldropbox.twilightparadox.com/login', obj)
         .then((response) => {
           if(response.data.error !== false) {
             return this.setState({ errorUser: { message: response.data.message, error: true }, error: true })
@@ -250,7 +230,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                         {() => {
                           axios({
                               method: 'post',
-                              url: 'http://localhost:4000/google/auth/co',
+                              url: 'https://digitaldropbox.twilightparadox.com/google/auth/co',
                               data : {users:localStorage.getItem("user")}
                             })
                             .then((response) => {

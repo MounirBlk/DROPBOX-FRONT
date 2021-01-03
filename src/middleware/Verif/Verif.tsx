@@ -30,7 +30,7 @@ export const password = (password:string) =>
 export const token = (token : any) => {
     var config : any = {
         method: 'GET',
-        url: 'http://localhost:4000/token',
+        url: 'https://digitaldropbox.twilightparadox.com/token',
         headers: { 
             'Authorization': 'Bearer '+token, 
             'Content-Type': 'application/x-www-form-urlencoded',

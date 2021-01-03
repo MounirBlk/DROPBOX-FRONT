@@ -41,7 +41,6 @@ export class Menu extends React.PureComponent<P & WithStyles<Styles>, S>{
         return (
         <div>
             <ToolbarComponent.Display openDrawerHandler={this.openDrawer} />
-            {token(localStorage.getItem("security") ? localStorage.getItem("security") : "")}
             <DrawerComponent.Display left={this.state.left} toggleDrawerHandler={this.toggleDrawer} />
         </div>
         );

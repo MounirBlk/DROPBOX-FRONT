@@ -54,14 +54,6 @@ public static Display = withStyles(styles as any)(DrawerComponent) as React.Comp
             <ListItemText primary="Profile"/>
             </ListItem>
           </Link>
-           <Link to="/">
-          <ListItem button={true}>
-            <ListItemIcon>
-              <HttpIcon />
-            </ListItemIcon>
-            <ListItemText primary="Documentation Api" />
-          </ListItem> 
-          </Link>
           <Link to="/prenium">
           <ListItem button={true}>
             <ListItemIcon>

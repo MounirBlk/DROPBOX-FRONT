@@ -81,7 +81,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
     event.preventDefault();
     var config : any = {
       method: 'DELETE',
-      url: 'http://localhost:4000/user/',
+      url: 'https://digitaldropbox.twilightparadox.com/user/',
       timeout: 1000,
       headers: { 
         'Authorization': 'Bearer '+localStorage.getItem('security'), 
@@ -108,7 +108,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
   componentDidMount() {
     var config : any = {
       method: 'GET',
-      url: 'http://localhost:4000/user/',
+      url: 'https://digitaldropbox.twilightparadox.com/user/',
       headers: { 
         'Authorization': 'Bearer '+localStorage.getItem('security'), 
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -118,20 +118,18 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
     axios(config)
     .then((response : any) => {
       console.log(response.data)
-      if(response.status === 200)
-      {
-        this.setState({ 
-        civilite: response.data.user.civilite, 
-        email: response.data.user.email, 
-        firstName: response.data.user.firstname, 
-        lastName: response.data.user.lastname, 
-        portable: response.data.user.portable, 
-        date_naissance: response.data.user.date_naissance, 
-        username: response.data.user.username,   });
-      }
+      this.setState({ 
+      civilite: response.data.user.civilite, 
+      email: response.data.user.email, 
+      firstName: response.data.user.firstname, 
+      lastName: response.data.user.lastname, 
+      portable: response.data.user.portable, 
+      date_naissance: response.data.user.date_naissance, 
+      username: response.data.user.username,   });
+      
     })
     .catch((error : any) => {
-      this.setState({ message: { message: "erreur serveur", error: true }, error: true })
+      console.log('data non disponible')
     });
   }
 
@@ -167,7 +165,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
 
       var config : any = {
         method: 'PUT',
-        url: 'http://localhost:4000/user/',
+        url: 'https://digitaldropbox.twilightparadox.com/user/',
         timeout: 1000,
         headers: { 
           'Authorization': 'Bearer '+localStorage.getItem('security'), 

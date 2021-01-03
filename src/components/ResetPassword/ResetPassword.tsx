@@ -60,7 +60,7 @@ export class ResetPassword extends React.PureComponent<P & WithStyles<Styles>, S
       let obj = {
         email: this.state.value
       }
-      axios.post('http://localhost:4000/password', obj)
+      axios.post('https://digitaldropbox.twilightparadox.com/password', obj)
         .then((response) => {
           this.setState({ message: { message: "un email vous à été transmis",error: false }, success: true });
         })

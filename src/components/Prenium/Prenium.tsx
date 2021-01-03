@@ -52,7 +52,7 @@ export class Prenium extends React.Component<P & WithStyles<Styles>, S> {
     event.preventDefault();
     var config : any = {
       method: 'DELETE',
-      url: 'http://localhost:4000/stripe/payment',
+      url: 'https://digitaldropbox.twilightparadox.com/stripe/payment',
       headers: { 
         'Authorization': 'Bearer '+localStorage.getItem('security'), 
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -84,7 +84,7 @@ export class Prenium extends React.Component<P & WithStyles<Styles>, S> {
 
     var config : any = {
       method: 'POST',
-      url: 'http://localhost:4000/stripe/payment',
+      url: 'https://digitaldropbox.twilightparadox.com/stripe/payment',
       headers: { 
         'Authorization': 'Bearer '+localStorage.getItem('security'), 
         'Content-Type': 'application/x-www-form-urlencoded',

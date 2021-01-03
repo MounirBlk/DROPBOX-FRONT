@@ -109,7 +109,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
 
   getFileRequest = (fichier: string, args: any, isEdit: boolean) => {
     axios
-      .post('http://localhost:4000/GetFile', { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name })
+      .post('https://digitaldropbox.twilightparadox.com/GetFile', { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name })
       .then((response) => {
           if(isEdit){
             this.setState({ contentFile: response.data });
