@@ -12,7 +12,7 @@ import { Nf404 } from './components/Nf404/Nf404'
 import PrivateRoute from './guard/guard'
 import {Prenium} from './components/Prenium/Prenium'
 import {Merci} from './components/Merci/Merci'
-import {Api} from './components/API/Api'
+//import {Api} from './components/API/Api'
 import {Google} from './components/Google/Google'
 
 export class App extends React.PureComponent {
@@ -26,7 +26,7 @@ export class App extends React.PureComponent {
             <Route exact={true} path={'/login'} component={()=>(
               <Login.Display />
             )} />
-             <PrivateRoute exact={true} path={'/google/connexion'} component={()=>(
+            <PrivateRoute exact={true} path={'/google/connexion'} component={()=>(
               <Google.Display />
             )} />
             <PrivateRoute exact={true} path={'/dashboard'} component={()=>(
@@ -49,9 +49,6 @@ export class App extends React.PureComponent {
             )}  />
              <PrivateRoute  exact={true} path={'/merci'}  component={()=>(
               <Merci.Display />
-            )}  />
-              <PrivateRoute  exact={true} path={'/api'}  component={()=>(
-              <Api.Display />
             )}  />
             <Route exact={true} path={'*'} render={()=>(
               <Nf404.Display />
