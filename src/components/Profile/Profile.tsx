@@ -81,7 +81,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
     event.preventDefault();
     var config : any = {
       method: 'DELETE',
-      url: 'https://digitaldropbox.twilightparadox.com/user/',
+      url: 'https://digitaldropbox.twilightparadox.com/user',
       timeout: 1000,
       headers: { 
         'Authorization': 'Bearer '+localStorage.getItem('security'), 
@@ -108,7 +108,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
   componentDidMount() {
     var config : any = {
       method: 'GET',
-      url: 'https://digitaldropbox.twilightparadox.com/user/',
+      url: 'https://digitaldropbox.twilightparadox.com/user',
       headers: { 
         'Authorization': 'Bearer '+localStorage.getItem('security'), 
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -165,7 +165,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
 
       var config : any = {
         method: 'PUT',
-        url: 'https://digitaldropbox.twilightparadox.com/user/',
+        url: 'https://digitaldropbox.twilightparadox.com/user',
         timeout: 1000,
         headers: { 
           'Authorization': 'Bearer '+localStorage.getItem('security'), 

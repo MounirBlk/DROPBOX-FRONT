@@ -203,7 +203,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                 </Button>
                 </form>
                 <Grid container spacing={3}>
-                {/*<Grid item xs={12} sm={8} md={12}>
+                <Grid item xs={12} sm={8} md={12}>
                 <FirebaseAuthProvider {...config} firebase={firebase}>
                   <div>
                     <Button
@@ -246,7 +246,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                     </div>
                   </div>
                 </FirebaseAuthProvider>
-                </Grid >*/}
+                </Grid >
                 </Grid>
                 <Grid container>
                   <Grid item xs>
