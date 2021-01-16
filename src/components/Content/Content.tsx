@@ -196,7 +196,8 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     }
   }
 
-  getUser = () => {
+  shareFileOpen = (event: any) => {
+    event.preventDefault();
     const config = {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('security')
@@ -207,18 +208,14 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       .get('https://digitaldropbox.twilightparadox.com/users', config)
       .then((response) => {
         this.setState({ utilisateurs : response.data.users });
+        this.setState({ isDialogShare: true })
       })
       .catch((error) => {
         console.log(error)   
         setTimeout(() => {
           document.location.reload(true);
         }, 5000);
-      });
-  }
-
-  shareFileOpen = () => {
-    this.getUser();
-    this.setState({ isDialogShare: true })
+      });    
   }
   shareFileFolder = () => {
     if((this.state.userNameShare !== null && this.state.userNameShare !== undefined) && (this.state.fileDataShare !== null && this.state.fileDataShare !== undefined)){
@@ -305,7 +302,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
                 Dropbox Manager
               </Grid>
               <Grid item>
-              <Button variant="outlined" color="inherit" onClick={this.shareFileOpen}>
+              <Button variant="outlined" color="inherit" onClick={event => this.shareFileOpen(event)}>
                 <AccountTreeOutlinedIcon />Système de Partage
               </Button>
               </Grid>

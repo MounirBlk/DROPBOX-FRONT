@@ -79,9 +79,9 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
     login = (event: any) => {
       console.log('Connexion')
       event.preventDefault();
-    if (email(this.state.email) === false)
+    if (email(this.state.email) === false){
       this.setState({ errorUser: { message: "Votre email n'est pas correcte", error: true }, error: true })
-    else {
+    }else {
       let obj = {
         email: this.state.email,
         password: this.state.password
