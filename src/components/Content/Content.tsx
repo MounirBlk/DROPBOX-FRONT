@@ -203,9 +203,9 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
         'Authorization': 'Bearer ' + localStorage.getItem('security')
       },
     };
-
+    const payload = {}
     axios
-      .get('https://digitaldropbox.twilightparadox.com/users', config)
+      .post('https://digitaldropbox.twilightparadox.com/users', payload, config)
       .then((response) => {
         this.setState({ utilisateurs : response.data.users });
         this.setState({ isDialogShare: true })

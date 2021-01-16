@@ -106,31 +106,30 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
   }
  
   componentDidMount() {
-    var config : any = {
-      method: 'GET',
-      url: 'https://digitaldropbox.twilightparadox.com/user',
-      headers: { 
-        'Authorization': 'Bearer '+localStorage.getItem('security'), 
-        'Content-Type': 'application/x-www-form-urlencoded',
-      }
+    const config = {
+      headers: {
+        //'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer ' + localStorage.getItem('security')
+      },
     };
-
-    axios(config)
-    .then((response : any) => {
-      console.log(response.data)
-      this.setState({ 
-      civilite: response.data.user.civilite, 
-      email: response.data.user.email, 
-      firstName: response.data.user.firstname, 
-      lastName: response.data.user.lastname, 
-      portable: response.data.user.portable, 
-      date_naissance: response.data.user.date_naissance, 
-      username: response.data.user.username,   });
-      
-    })
-    .catch((error : any) => {
-      console.log('data non disponible')
-    });
+    const payload = {}
+    axios
+      .post('https://digitaldropbox.twilightparadox.com/user', payload, config)
+      .then((response : any) => {
+        console.log(response.data)
+        this.setState({ 
+        civilite: response.data.user.civilite, 
+        email: response.data.user.email, 
+        firstName: response.data.user.firstname, 
+        lastName: response.data.user.lastname, 
+        portable: response.data.user.portable, 
+        date_naissance: response.data.user.date_naissance, 
+        username: response.data.user.username,   });
+        
+      })
+      .catch((error : any) => {
+        console.log('data non disponible')
+      });
   }
 
     Envoi = (event : any) => {
@@ -436,7 +435,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
                       variant="outlined"
                       fullWidth
                       id="email"
-                      disabled={this.state.isActive}
+                      disabled
                       label="Email"
                       name="email"
                       type="email"
