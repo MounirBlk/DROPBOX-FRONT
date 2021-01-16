@@ -217,7 +217,8 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
         }, 5000);
       });    
   }
-  shareFileFolder = () => {
+  shareFileFolder = (event: any) => {
+    event.preventDefault();
     if((this.state.userNameShare !== null && this.state.userNameShare !== undefined) && (this.state.fileDataShare !== null && this.state.fileDataShare !== undefined)){
       let payload = {
         sharedTo : this.state.userNameShare,
@@ -249,6 +250,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     }
   }
   addFolder = (event: any) => {
+    event.preventDefault();
     if(event.target.files.length > 0){
       let fileDataTab: Array<any> = []
       for(let i = 0; i < event.target.files.length; i++){
@@ -432,7 +434,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             <Button onClick={() => this.setState({ isDialogShare: false })} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.shareFileFolder} color="primary">
+            <Button onClick={event => this.shareFileFolder(event)} color="primary">
               Partager
             </Button>
           </DialogActions>
