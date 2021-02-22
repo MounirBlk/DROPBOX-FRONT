@@ -81,7 +81,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
     event.preventDefault();
     var config : any = {
       method: 'DELETE',
-      url: 'https://digitaldropbox.twilightparadox.com/user',
+      url: 'https://digital-dropbox.herokuapp.com/user',
       timeout: 1000,
       headers: { 
         'Authorization': 'Bearer '+localStorage.getItem('security'), 
@@ -114,7 +114,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
     };
     const payload = {}
     axios
-      .post('https://digitaldropbox.twilightparadox.com/user', payload, config)
+      .post('https://digital-dropbox.herokuapp.com/user', payload, config)
       .then((response : any) => {
         console.log(response.data)
         this.setState({ 
@@ -164,7 +164,7 @@ export class Profile extends React.Component<P & WithStyles<Styles>, S> {
 
       var config : any = {
         method: 'PUT',
-        url: 'https://digitaldropbox.twilightparadox.com/user',
+        url: 'https://digital-dropbox.herokuapp.com/user',
         timeout: 1000,
         headers: { 
           'Authorization': 'Bearer '+localStorage.getItem('security'), 

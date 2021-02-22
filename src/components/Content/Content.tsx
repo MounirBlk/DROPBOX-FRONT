@@ -138,7 +138,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       },
     };
     axios
-      .post('https://digitaldropbox.twilightparadox.com/GetFile', { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name }, config)
+      .post('https://digital-dropbox.herokuapp.com/GetFile', { filePath: fichier, isEdit: isEdit, fileName: args.fileDetails.name }, config)
       .then((response) => {
           if(isEdit){
             this.setState({ contentFile: response.data });
@@ -174,7 +174,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     };
 
     axios
-      .post('https://digitaldropbox.twilightparadox.com/SaveFile', payload, config)
+      .post('https://digital-dropbox.herokuapp.com/SaveFile', payload, config)
       .then((response) => {
           this.setState({ openFileDialog: false });
           setTimeout(() => {
@@ -205,7 +205,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
     };
     const payload = {}
     axios
-      .post('https://digitaldropbox.twilightparadox.com/users', payload, config)
+      .post('https://digital-dropbox.herokuapp.com/users', payload, config)
       .then((response) => {
         this.setState({ utilisateurs : response.data.users });
         this.setState({ isDialogShare: true })
@@ -232,7 +232,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       };
   
       axios
-        .post('https://digitaldropbox.twilightparadox.com/Share', payload, config)
+        .post('https://digital-dropbox.herokuapp.com/Share', payload, config)
         .then((response) => {
           if(!response.data.error){
             this.setState({ isDialogShare: false })
@@ -271,7 +271,7 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
       formData.append('action', 'save')
       formData.append('typeUpload', 'folder')
 
-      axios.post('https://digitaldropbox.twilightparadox.com/Upload', formData , config)
+      axios.post('https://digital-dropbox.herokuapp.com/Upload', formData , config)
         .then((response) => {
           setTimeout(() => {
             document.location.reload(true);
@@ -333,10 +333,10 @@ export class ContentProps extends React.PureComponent<P & WithStyles<Styles>, S>
             <div className="control-section">
               <div className="filemanager-container">
                 <FileManagerComponent id="file" view="LargeIcons" ajaxSettings={{
-                  getImageUrl:  "https://digitaldropbox.twilightparadox.com/GetImage",// hostUrl + "api/FileManager/GetImage"
-                  url: "https://digitaldropbox.twilightparadox.com/Manager",// hostUrl +"api/FileManager/FileOperations"
-                  downloadUrl:"https://digitaldropbox.twilightparadox.com/Download",// hostUrl + 'api/FileManager/Download'
-                  uploadUrl:  "https://digitaldropbox.twilightparadox.com/Upload" ,// hostUrl + 'api/FileManager/Upload'
+                  getImageUrl:  "https://digital-dropbox.herokuapp.com/GetImage",// hostUrl + "api/FileManager/GetImage"
+                  url: "https://digital-dropbox.herokuapp.com/Manager",// hostUrl +"api/FileManager/FileOperations"
+                  downloadUrl:"https://digital-dropbox.herokuapp.com/Download",// hostUrl + 'api/FileManager/Download'
+                  uploadUrl:  "https://digital-dropbox.herokuapp.com/Upload" ,// hostUrl + 'api/FileManager/Upload'
                 }} 
                 beforeSend={this.beforeSend.bind(this)}
                 /*path='/download' */

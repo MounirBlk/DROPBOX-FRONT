@@ -87,7 +87,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
         password: this.state.password
       }
 
-      axios.post('https://digitaldropbox.twilightparadox.com/login', obj)
+      axios.post('https://digital-dropbox.herokuapp.com/login', obj)
         .then((response) => {
           if(response.data.error !== false) {
             return this.setState({ errorUser: { message: response.data.message, error: true }, error: true })
@@ -228,7 +228,7 @@ export class Login extends React.PureComponent<P & WithStyles<Styles>,S>{
                         {() => {
                           axios({
                               method: 'post',
-                              url: 'https://digitaldropbox.twilightparadox.com/google/auth/co',
+                              url: 'https://digital-dropbox.herokuapp.com/google/auth/co',
                               data : {users:localStorage.getItem("user")}
                             })
                             .then((response) => {

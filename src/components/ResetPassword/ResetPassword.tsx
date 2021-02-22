@@ -60,7 +60,7 @@ export class ResetPassword extends React.PureComponent<P & WithStyles<Styles>, S
       let obj = {
         email: this.state.value
       }
-      axios.post('https://digitaldropbox.twilightparadox.com/password', obj)
+      axios.post('https://digital-dropbox.herokuapp.com/password', obj)
         .then((response) => {
           this.setState({ message: { message: "un email vous à été transmis",error: false }, success: true });
         })

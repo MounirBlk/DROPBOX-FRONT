@@ -44,7 +44,7 @@ export class Google extends React.PureComponent<P>{
                 {() => {
                   axios({
                       method: 'post',
-                      url: 'https://digitaldropbox.twilightparadox.com/google/auth/co',
+                      url: 'https://digital-dropbox.herokuapp.com/google/auth/co',
                       data : {users:localStorage.getItem("user")}
                     })
                     .then((response) => {
